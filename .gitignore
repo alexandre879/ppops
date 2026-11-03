@@ -1,0 +1,22 @@
+# Secrets
+.env
+backend/.env
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+backend/media/
+backend/private_media/
+backend/staticfiles/
+
+# Node / Next.js
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

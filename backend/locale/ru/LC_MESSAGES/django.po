@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 04:08+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "A password is required for new users."
+msgstr "Для нового пользователя требуется пароль."
+
+msgid "Incorrect email or password."
+msgstr "Неверный email или пароль."
+
+msgid "Current password is incorrect."
+msgstr "Текущий пароль указан неверно."
+
+msgid "Session expired. Please sign in again."
+msgstr "Сеанс истёк. Пожалуйста, войдите снова."
+
+msgid "Not signed in."
+msgstr "Вход не выполнен."
+
+msgid "You cannot deactivate your own account."
+msgstr "Нельзя деактивировать собственную учётную запись."
+
+msgid "You cannot delete your own account."
+msgstr "Нельзя удалить собственную учётную запись."
+
+msgid "Must be greater than zero."
+msgstr "Значение должно быть больше нуля."
+
+msgid ""
+"This record is linked to other records (for example quotations, contracts or"
+" projects) and cannot be deleted. Set it to inactive instead."
+msgstr ""
+"Эта запись связана с другими записями (например, с предложениями, договорами"
+" или проектами) и не может быть удалена. Вместо этого сделайте её "
+"неактивной."
+
+#, python-format
+msgid "File is too large (maximum %(size)s MB)."
+msgstr "Файл слишком большой (максимум %(size)s МБ)."
+
+msgid "Fill this in at least one language."
+msgstr "Заполните хотя бы на одном языке."
+
+msgid "No file attached."
+msgstr "Файл не прикреплён."
+
+msgid "Enter at least a phone number or an email address."
+msgstr "Укажите хотя бы номер телефона или email."
+
+msgid "End date cannot be before the start date."
+msgstr "Дата окончания не может быть раньше даты начала."
+
+msgid "Counted quantity cannot be negative."
+msgstr "Подсчитанное количество не может быть отрицательным."
+
+msgid "Quantity must be greater than zero."
+msgstr "Количество должно быть больше нуля."
+
+msgid "This order is completed and its output is already in stock."
+msgstr "Этот заказ завершён, и его продукция уже на складе."
+
+#, python-format
+msgid "Only %(quantity)s %(unit)s in stock."
+msgstr "На складе только %(quantity)s %(unit)s."
+
+msgid "Unknown movement type."
+msgstr "Неизвестный тип движения."
+
+msgid "Deadline cannot be before the start date."
+msgstr "Срок не может быть раньше даты начала."
+
+msgid "Amount must be greater than zero."
+msgstr "Сумма должна быть больше нуля."
+
+msgid "No receipt attached."
+msgstr "Чек не прикреплён."
+
+msgid "Please leave a phone number or an email so we can reply."
+msgstr "Пожалуйста, укажите телефон или email, чтобы мы могли ответить."
+
+msgid "Thank you! We will contact you shortly."
+msgstr "Спасибо! Мы скоро с вами свяжемся."
+
+msgid "Quotation"
+msgstr "Коммерческое предложение"
+
+msgid "No."
+msgstr "№"
+
+msgid "Issue date"
+msgstr "Дата выдачи"
+
+msgid "Valid until"
+msgstr "Действительно до"
+
+msgid "Tax ID"
+msgstr "Идентификационный код"
+
+msgid "Project ref."
+msgstr "Проект №"
+
+msgid "Prepared for"
+msgstr "Заказчик"
+
+msgid "Project"
+msgstr "Проект"
+
+msgid "Description"
+msgstr "Наименование"
+
+msgid "Qty"
+msgstr "Кол-во"
+
+msgid "Unit"
+msgstr "Ед."
+
+msgid "Unit price"
+msgstr "Цена за ед."
+
+msgid "Amount"
+msgstr "Сумма"
+
+msgid "No items yet."
+msgstr "Позиций пока нет."
+
+msgid "Subtotal"
+msgstr "Промежуточный итог"
+
+msgid "Discount"
+msgstr "Скидка"
+
+#, python-format
+msgid "VAT %(rate)s%%"
+msgstr "НДС %(rate)s%%"
+
+msgid "Total"
+msgstr "Итого"
+
+msgid "Notes"
+msgstr "Примечания"
+
+msgid "Terms & conditions"
+msgstr "Условия"
+
+msgid "Payment details"
+msgstr "Платёжные реквизиты"
+
+#, python-format
+msgid "Prepared by: %(name)s"
+msgstr "Подготовил(а): %(name)s"
+
+msgid "Accepted by client:"
+msgstr "Принято заказчиком:"
+
+msgid "Signature"
+msgstr "Подпись"
+
+msgid "Date"
+msgstr "Дата"
+
+#, python-format
+msgid "page %(number)s"
+msgstr "стр. %(number)s"
+
+msgid "Cannot be negative."
+msgstr "Не может быть отрицательным."
+
+msgid "Cannot be before the issue date."
+msgstr "Не может быть раньше даты выдачи."
+
+#, python-format
+msgid "Labour — %(service)s"
+msgstr "Работы — %(service)s"
+
+msgid ""
+"This service has no material recipe, labour norm or base price to estimate "
+"from."
+msgstr ""
+"У этой услуги нет рецептуры материалов, нормы трудозатрат или базовой цены "
+"для расчёта."
+
+msgid "copy"
+msgstr "копия"
+
+msgid "You need project management access to start a project."
+msgstr "Для запуска проекта нужен доступ к управлению проектами."

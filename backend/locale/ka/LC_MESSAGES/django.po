@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 04:08+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "A password is required for new users."
+msgstr "ახალი მომხმარებლისთვის პაროლი სავალდებულოა."
+
+msgid "Incorrect email or password."
+msgstr "ელ-ფოსტა ან პაროლი არასწორია."
+
+msgid "Current password is incorrect."
+msgstr "მიმდინარე პაროლი არასწორია."
+
+msgid "Session expired. Please sign in again."
+msgstr "სესიის ვადა ამოიწურა. გთხოვთ, თავიდან შეხვიდეთ."
+
+msgid "Not signed in."
+msgstr "არ ხართ შესული სისტემაში."
+
+msgid "You cannot deactivate your own account."
+msgstr "საკუთარი ანგარიშის დეაქტივაცია შეუძლებელია."
+
+msgid "You cannot delete your own account."
+msgstr "საკუთარი ანგარიშის წაშლა შეუძლებელია."
+
+msgid "Must be greater than zero."
+msgstr "მნიშვნელობა ნულზე მეტი უნდა იყოს."
+
+msgid ""
+"This record is linked to other records (for example quotations, contracts or"
+" projects) and cannot be deleted. Set it to inactive instead."
+msgstr ""
+"ეს ჩანაწერი დაკავშირებულია სხვა ჩანაწერებთან (მაგალითად, შეთავაზებებთან, "
+"ხელშეკრულებებთან ან პროექტებთან) და მისი წაშლა შეუძლებელია. სანაცვლოდ "
+"მონიშნეთ, როგორც არააქტიური."
+
+#, python-format
+msgid "File is too large (maximum %(size)s MB)."
+msgstr "ფაილი ძალიან დიდია (მაქსიმუმ %(size)s მბ)."
+
+msgid "Fill this in at least one language."
+msgstr "შეავსეთ ერთ ენაზე მაინც."
+
+msgid "No file attached."
+msgstr "ფაილი არ არის მიმაგრებული."
+
+msgid "Enter at least a phone number or an email address."
+msgstr "მიუთითეთ ტელეფონის ნომერი ან ელ-ფოსტა მაინც."
+
+msgid "End date cannot be before the start date."
+msgstr "დასრულების თარიღი არ შეიძლება იყოს დაწყების თარიღამდე."
+
+msgid "Counted quantity cannot be negative."
+msgstr "დათვლილი რაოდენობა არ შეიძლება იყოს უარყოფითი."
+
+msgid "Quantity must be greater than zero."
+msgstr "რაოდენობა ნულზე მეტი უნდა იყოს."
+
+msgid "This order is completed and its output is already in stock."
+msgstr "ეს შეკვეთა დასრულებულია და მისი პროდუქცია უკვე საწყობშია."
+
+#, python-format
+msgid "Only %(quantity)s %(unit)s in stock."
+msgstr "მარაგში მხოლოდ %(quantity)s %(unit)s არის."
+
+msgid "Unknown movement type."
+msgstr "მოძრაობის უცნობი ტიპი."
+
+msgid "Deadline cannot be before the start date."
+msgstr "ვადა არ შეიძლება იყოს დაწყების თარიღამდე."
+
+msgid "Amount must be greater than zero."
+msgstr "თანხა ნულზე მეტი უნდა იყოს."
+
+msgid "No receipt attached."
+msgstr "ქვითარი არ არის მიმაგრებული."
+
+msgid "Please leave a phone number or an email so we can reply."
+msgstr "გთხოვთ, მიუთითოთ ტელეფონი ან ელ-ფოსტა, რომ დაგიკავშირდეთ."
+
+msgid "Thank you! We will contact you shortly."
+msgstr "გმადლობთ! მალე დაგიკავშირდებით."
+
+msgid "Quotation"
+msgstr "კომერციული შეთავაზება"
+
+msgid "No."
+msgstr "№"
+
+msgid "Issue date"
+msgstr "გაცემის თარიღი"
+
+msgid "Valid until"
+msgstr "მოქმედების ვადა"
+
+msgid "Tax ID"
+msgstr "საიდენტიფიკაციო კოდი"
+
+msgid "Project ref."
+msgstr "პროექტის №"
+
+msgid "Prepared for"
+msgstr "დამკვეთი"
+
+msgid "Project"
+msgstr "პროექტი"
+
+msgid "Description"
+msgstr "დასახელება"
+
+msgid "Qty"
+msgstr "რაოდ."
+
+msgid "Unit"
+msgstr "ერთ."
+
+msgid "Unit price"
+msgstr "ერთ. ფასი"
+
+msgid "Amount"
+msgstr "თანხა"
+
+msgid "No items yet."
+msgstr "პოზიციები ჯერ არ არის."
+
+msgid "Subtotal"
+msgstr "შუალედური ჯამი"
+
+msgid "Discount"
+msgstr "ფასდაკლება"
+
+#, python-format
+msgid "VAT %(rate)s%%"
+msgstr "დღგ %(rate)s%%"
+
+msgid "Total"
+msgstr "სულ"
+
+msgid "Notes"
+msgstr "შენიშვნები"
+
+msgid "Terms & conditions"
+msgstr "პირობები"
+
+msgid "Payment details"
+msgstr "საბანკო რეკვიზიტები"
+
+#, python-format
+msgid "Prepared by: %(name)s"
+msgstr "მოამზადა: %(name)s"
+
+msgid "Accepted by client:"
+msgstr "დამკვეთის თანხმობა:"
+
+msgid "Signature"
+msgstr "ხელმოწერა"
+
+msgid "Date"
+msgstr "თარიღი"
+
+#, python-format
+msgid "page %(number)s"
+msgstr "გვერდი %(number)s"
+
+msgid "Cannot be negative."
+msgstr "არ შეიძლება იყოს უარყოფითი."
+
+msgid "Cannot be before the issue date."
+msgstr "არ შეიძლება იყოს გაცემის თარიღამდე."
+
+#, python-format
+msgid "Labour — %(service)s"
+msgstr "სამუშაო — %(service)s"
+
+msgid ""
+"This service has no material recipe, labour norm or base price to estimate "
+"from."
+msgstr ""
+"ამ მომსახურებას არ აქვს მასალების რეცეპტი, შრომის ნორმა ან საბაზისო ფასი "
+"შესაფასებლად."
+
+msgid "copy"
+msgstr "ასლი"
+
+msgid "You need project management access to start a project."
+msgstr "პროექტის დასაწყებად საჭიროა პროექტების მართვის უფლება."

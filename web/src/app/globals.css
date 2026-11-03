@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand orange — the main colour of New House World */
+  --color-brand-50: #fff5ed;
+  --color-brand-100: #ffe8d4;
+  --color-brand-200: #ffcda8;
+  --color-brand-300: #ffaa70;
+  --color-brand-400: #fd8237;
+  --color-brand-500: #f26b1d;
+  --color-brand-600: #e3530c;
+  --color-brand-700: #bc3e0c;
+  --color-brand-800: #953212;
+  --color-brand-900: #782b12;
+  --color-brand-950: #411307;
+
+  /* Latin & Cyrillic from Inter/Manrope; Georgian glyphs fall through to Noto Sans Georgian. */
+  --font-sans: var(--font-inter), var(--font-georgian), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-georgian), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-float: float 7s ease-in-out infinite;
+  /* "backwards", not "both": an animation that stays applied after it ends switches off
+     backdrop blur for any glass inside the element (Chromium). */
+  --animate-rise: rise 0.9s var(--ease-liquid) backwards;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Georgian has no everyday capitals: CSS uppercase would switch to Mtavruli. */
+html:lang(ka) .uppercase {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+/* Georgian words run long and the script is dense: lighter, untracked headings read better. */
+html:lang(ka) :is(h1, h2, h3) {
+  font-weight: 700;
+  letter-spacing: 0;
+}
+html:lang(ka) h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-white font-sans text-stone-800 antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-stone-950;
+  }
+  /* The header floats over the page: anchors must land below it. */
+  [id] {
+    scroll-margin-top: 6.5rem;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+  ::selection {
+    @apply bg-brand-200 text-stone-950;
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility bg-hatch {
+  background-image: repeating-linear-gradient(135deg, rgb(242 107 29 / 0.14) 0 2px, transparent 2px 14px);
+}
+
+/* Fades a background layer out towards the edges. */
+@utility mask-soft {
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+
+/* Large headings on dark backgrounds: a soft top-to-bottom light falloff. */
+@utility text-sheen {
+  background: linear-gradient(180deg, #fff 30%, rgb(255 255 255 / 0.72));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+ * Liquid glass
+ * ------------------------------------------------------------------------- */
+
+@layer components {
+  /* Frosted panel for dark, colourful backgrounds. */
+  .glass {
+    background: linear-gradient(140deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.04) 60%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      0 30px 60px -30px rgb(0 0 0 / 0.6);
+  }
+  /* Smoky panel that stays readable over both light and dark content. */
+  .glass-dark {
+    background-color: rgb(28 25 23 / 0.7);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
+    backdrop-filter: blur(18px) saturate(170%);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1),
+      0 18px 40px -20px rgb(0 0 0 / 0.55);
+  }
+  /* Milky panel for light backgrounds and photos. */
+  .glass-light {
+    background-color: rgb(255 255 255 / 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
+    border: 1px solid rgb(255 255 255 / 0.7);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 12px 30px -16px rgb(28 25 23 / 0.35);
+  }
+  @media (max-width: 639px) {
+    .glass {
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      backdrop-filter: blur(14px) saturate(150%);
+    }
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass {
+      background: rgb(41 37 36 / 0.9);
+    }
+    .glass-dark {
+      background-color: rgb(28 25 23 / 0.95);
+    }
+    .glass-light {
+      background-color: rgb(255 255 255 / 0.95);
+    }
+  }
+
+  /* Slowly drifting light behind a section (see <LiquidBackdrop>). */
+  .liquid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .liquid-blob {
+    position: absolute;
+    aspect-ratio: 1.25;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--blob), transparent);
+    will-change: transform;
+  }
+  .liquid-blob:nth-child(1) {
+    --blob: rgb(242 107 29 / 0.62);
+    width: max(560px, 62vw);
+    top: -32%;
+    left: -18%;
+    animation: liquid-1 26s ease-in-out infinite alternate;
+  }
+  .liquid-blob:nth-child(2) {
+    --blob: rgb(253 130 55 / 0.38);
+    width: max(440px, 46vw);
+    top: 5%;
+    right: -18%;
+    animation: liquid-2 31s ease-in-out infinite alternate;
+  }
+  .liquid-blob:nth-child(3) {
+    --blob: rgb(149 50 18 / 0.6);
+    width: max(520px, 56vw);
+    bottom: -60%;
+    left: 22%;
+    animation: liquid-3 37s ease-in-out infinite alternate;
+  }
+  .liquid-light .liquid-blob:nth-child(1) {
+    --blob: rgb(255 205 168 / 0.55);
+  }
+  .liquid-light .liquid-blob:nth-child(2) {
+    --blob: rgb(255 232 212 / 0.8);
+  }
+  .liquid-light .liquid-blob:nth-child(3) {
+    --blob: rgb(255 170 112 / 0.22);
+  }
+  .liquid-brand .liquid-blob:nth-child(1) {
+    --blob: rgb(255 170 112 / 0.75);
+  }
+  .liquid-brand .liquid-blob:nth-child(2) {
+    --blob: rgb(255 205 168 / 0.5);
+  }
+  .liquid-brand .liquid-blob:nth-child(3) {
+    --blob: rgb(188 62 12 / 0.55);
+  }
+  /* Film grain keeps large gradients from banding. */
+  .liquid-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .liquid-light .liquid-grain {
+    opacity: 0.05;
+  }
+
+  /* A soft band of light sweeps across on hover. */
+  .sheen {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.55) 50%, transparent 65%);
+    transform: translateX(-110%);
+    transition: transform 0.9s var(--ease-liquid);
+  }
+  .sheen:hover::after,
+  .sheen:focus-within::after {
+    transform: translateX(110%);
+  }
+
+  /* Numbers count up from zero; the real value sits beside it for screen readers and search engines. */
+  .count-up {
+    counter-reset: count var(--count);
+    animation: count-up 2.2s var(--ease-liquid) 0.5s both;
+  }
+  .count-up::after {
+    content: counter(count);
+  }
+}
+
+@property --count {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes count-up {
+  from {
+    --count: 0;
+  }
+  to {
+    --count: var(--to);
+  }
+}
+
+@keyframes liquid-1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(12%, 14%, 0) rotate(40deg) scale(1.15);
+  }
+  100% {
+    transform: translate3d(4%, 26%, 0) rotate(80deg) scale(0.95);
+  }
+}
+@keyframes liquid-2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(-18%, 10%, 0) rotate(-35deg) scale(1.2);
+  }
+  100% {
+    transform: translate3d(-8%, -12%, 0) rotate(-70deg) scale(0.9);
+  }
+}
+@keyframes liquid-3 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(-14%, -16%, 0) rotate(30deg) scale(1.1);
+  }
+  100% {
+    transform: translate3d(10%, -6%, 0) rotate(60deg) scale(1.2);
+  }
+}
+
+/* Content slides in the first time it scrolls into view (see <ScrollReveal>). Hidden only
+   while the script is running: the layout adds "js" to <html> and removes it if the script fails. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .js :is(.reveal, .reveal-group > *):not(.revealed) {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-blob,
+  .count-up,
+  .animate-float,
+  .animate-rise {
+    animation: none;
+  }
+  .count-up {
+    --count: var(--to);
+  }
+  .sheen::after {
+    display: none;
+  }
+}
