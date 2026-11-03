@@ -1,0 +1,103 @@
+# Development stack: every app runs from your working copy and reloads on save.
+#
+#   docker compose -f docker-compose.dev.yml up --build
+#
+#   Website   http://localhost:3000
+#   Admin     http://localhost:3001   (demo accounts: see README)
+#   API docs  http://localhost:8000/api/docs/
+#
+# No .env needed. For the production-like stack (nginx, built images) use docker-compose.yml.
+name: newhousemodern-dev
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: newhousemodern
+      POSTGRES_USER: nhm
+      POSTGRES_PASSWORD: nhm
+    ports:
+      # For database GUIs on your machine; 5433 avoids clashing with a local Postgres.
+      - "127.0.0.1:${DEV_DB_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nhm -d newhousemodern"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+
+  backend:
+    build: ./backend
+    # Run through sh so a checkout without the executable bit still works.
+    entrypoint: ["sh", "/app/entrypoint.sh"]
+    command: python manage.py runserver 0.0.0.0:8000
+    # Set explicitly so a local backend/.env (read by settings.py) can't override them.
+    environment:
+      DJANGO_DEBUG: "True"
+      DATABASE_URL: postgres://nhm:nhm@db:5432/newhousemodern
+      CACHE_URL: redis://redis:6379/0
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      CSRF_TRUSTED_ORIGINS: http://localhost:3000,http://localhost:3001
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:3001
+      AUTH_COOKIE_SECURE: "False"
+      MEDIA_ROOT: /app/media
+      PRIVATE_MEDIA_ROOT: /app/private_media
+      ADMIN_EMAIL: admin@newhousemodern.ge
+      ADMIN_PASSWORD: "ChangeMe-2026!"
+      SEED_ON_START: "true"
+      SEED_ARGS: --demo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - media:/app/media
+      - private_media:/app/private_media
+      - /app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  web:
+    build:
+      context: ./web
+      target: dev
+    environment:
+      API_PROXY_TARGET: http://backend:8000
+      API_INTERNAL_URL: http://backend:8000
+      SITE_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/app
+      # Linux packages from the image, not the ones installed on your machine.
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+
+  admin:
+    build:
+      context: ./admin
+      target: dev
+    environment:
+      API_PROXY_TARGET: http://backend:8000
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./admin:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  media:
+  private_media:

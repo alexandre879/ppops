@@ -3,6 +3,20 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
+# Development (docker-compose.dev.yml): dependencies only. The source is mounted
+# over /app and served by `next dev`, so edits reload without a rebuild.
+FROM node:22-alpine AS dev
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN chown node:node /app
+USER node
+COPY --chown=node:node package.json package-lock.json ./
+RUN npm ci && mkdir .next
+EXPOSE 3001
+# node_modules lives in a volume that outlives rebuilds; reinstall when it no
+# longer matches package.json (e.g. after pulling a commit that adds a package).
+CMD ["sh", "-c", "npm ls >/dev/null 2>&1 || npm ci; exec npm run dev"]
+
 FROM node:22-alpine AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
