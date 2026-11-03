@@ -68,7 +68,7 @@ export function CtaBand({ site, dict, lang }: { site: Site; dict: Dictionary; la
   return (
     <section className="py-16 sm:py-20">
       <Container>
-        <div className="reveal relative isolate flex flex-col gap-8 overflow-clip rounded-[2rem] bg-brand-500 px-6 py-12 shadow-[0_40px_80px_-40px_rgb(188_62_12/0.8)] sm:px-12 lg:flex-row lg:items-center lg:justify-between">
+        <div className="reveal relative isolate flex flex-col gap-8 overflow-clip rounded-4xl bg-brand-500 px-6 py-12 shadow-[0_40px_80px_-40px_rgb(188_62_12/0.8)] sm:px-12 lg:flex-row lg:items-center lg:justify-between">
           <LiquidBackdrop tone="brand" />
           <div className="max-w-2xl">
             <h2 className="text-3xl font-extrabold text-stone-950 sm:text-4xl">{dict.cta.title}</h2>
@@ -160,7 +160,7 @@ export function ContactSection({
           </ul>
         </div>
         <div
-          className={`${page ? "animate-rise [animation-delay:200ms]" : "reveal"} rounded-[2rem] border border-white/50 bg-white/[0.94] p-6 text-stone-900 shadow-[inset_0_1px_0_#fff,0_40px_90px_-30px_rgb(0_0_0/0.7)] backdrop-blur-2xl sm:p-9`}
+          className={`${page ? "animate-rise [animation-delay:200ms]" : "reveal"} rounded-4xl border border-white/50 bg-white/0.94 p-6 text-stone-900 shadow-[inset_0_1px_0_#fff,0_40px_90px_-30px_rgb(0_0_0/0.7)] backdrop-blur-2xl sm:p-9`}
         >
           <EnquiryForm services={serviceOptions(categories)} defaultService={defaultService} lang={lang} t={dict.form} />
         </div>
