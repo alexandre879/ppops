@@ -19,6 +19,13 @@ class ServiceCategory(TimeStampedModel):
     slug = models.SlugField(max_length=80, unique=True, blank=True)
     description = models.TextField(blank=True)
     icon = models.CharField(max_length=20, choices=Icon.choices, default=Icon.BUILDING)
+    image = models.ImageField(
+        upload_to="services/categories/",
+        null=True,
+        blank=True,
+        validators=[validate_file_size],
+        help_text="Shown at the top of the category card on the website home page",
+    )
     order = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=True)
 

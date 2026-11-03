@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ProjectCard } from "@/components/cards";
 import { FacadeIllustration } from "@/components/facade-illustration";
 import { CategoryIconView } from "@/components/icons";
+import { MediaImage } from "@/components/media";
 import { ContactSection, ProcessSection, WhyUsSection } from "@/components/sections";
 import { TextureSwatch } from "@/components/texture-swatch";
 import { ButtonLink, Container, CountUp, Eyebrow, LiquidBackdrop, SectionHeading } from "@/components/ui";
@@ -154,30 +155,38 @@ export default async function HomePage({ params }: Props) {
               {categories.map((category) => (
                 <article
                   key={category.slug}
-                  className="sheen group flex flex-col rounded-3xl border border-stone-200/80 bg-white p-7 shadow-[0_10px_30px_-18px_rgb(28_25_23/0.25)] transition duration-500 ease-liquid hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_30px_60px_-28px_rgb(188_62_12/0.4)]"
+                  className="sheen group flex flex-col overflow-hidden rounded-3xl border border-stone-200/80 bg-white shadow-[0_10px_30px_-18px_rgb(28_25_23/0.25)] transition duration-500 ease-liquid hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-[0_30px_60px_-28px_rgb(188_62_12/0.4)]"
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 ring-1 ring-brand-100 transition duration-500 group-hover:bg-brand-500 group-hover:text-stone-950 group-hover:ring-brand-400">
-                    <CategoryIconView icon={category.icon} className="h-6 w-6" />
-                  </span>
-                  <h3 className="mt-5 text-xl font-bold">
-                    <Link href={`${localePath(lang, "/services")}#${category.slug}`} className="hover:text-brand-700">
-                      {category.name}
-                    </Link>
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-stone-600">{category.description}</p>
-                  <ul className="mt-5 space-y-1 border-t border-stone-100 pt-4 text-sm">
-                    {category.services.slice(0, 4).map((service) => (
-                      <li key={service.slug}>
-                        <Link
-                          href={localePath(lang, `/services/${service.slug}`)}
-                          className="group/link -mx-2 flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 font-medium text-stone-800 transition-colors hover:bg-brand-50 hover:text-brand-700"
-                        >
-                          {service.title}
-                          <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-stone-400 transition group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-brand-600" aria-hidden />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Optional photo, uploaded in the admin under Services → Categories. */}
+                  {category.image && (
+                    <div className="aspect-[16/9] overflow-hidden bg-stone-100">
+                      <MediaImage src={category.image} alt="" className="transition duration-1000 ease-liquid group-hover:scale-105" />
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col p-7">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 ring-1 ring-brand-100 transition duration-500 group-hover:bg-brand-500 group-hover:text-stone-950 group-hover:ring-brand-400">
+                      <CategoryIconView icon={category.icon} className="h-6 w-6" />
+                    </span>
+                    <h3 className="mt-5 text-xl font-bold">
+                      <Link href={`${localePath(lang, "/services")}#${category.slug}`} className="hover:text-brand-700">
+                        {category.name}
+                      </Link>
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-stone-600">{category.description}</p>
+                    <ul className="mt-5 space-y-1 border-t border-stone-100 pt-4 text-sm">
+                      {category.services.slice(0, 4).map((service) => (
+                        <li key={service.slug}>
+                          <Link
+                            href={localePath(lang, `/services/${service.slug}`)}
+                            className="group/link -mx-2 flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 font-medium text-stone-800 transition-colors hover:bg-brand-50 hover:text-brand-700"
+                          >
+                            {service.title}
+                            <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-stone-400 transition group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-brand-600" aria-hidden />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </article>
               ))}
             </div>

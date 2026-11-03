@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from rest_framework.test import APITestCase
 
-from apps.catalog.models import Service, ServiceCategory
+from apps.catalog.models import Service, ServiceCategory, Solution
 from apps.crm.models import Enquiry, Source
 from apps.projects.models import Project, ProjectPhoto
 
@@ -22,6 +22,26 @@ class PublicApiTests(APITestCase):
         titles = [s["title"] for s in self.client.get("/api/public/services/").data]
         self.assertEqual(titles, ["ACP cladding"])
         self.assertEqual(self.client.get("/api/public/services/hidden-draft/").status_code, 404)
+
+    def test_each_category_and_service_shows_only_its_own_photo(self):
+        # A material photo linked to the service must not be borrowed as the service's photo.
+        panel = Solution.objects.create(name="ACP panel", image="solutions/acp.jpg")
+        self.service.solutions.add(panel)
+        detail = self.client.get(f"/api/public/services/{self.service.slug}/").data
+        self.assertIsNone(detail["image"])
+        category = self.client.get("/api/public/categories/").data[0]
+        self.assertIsNone(category["image"])
+        self.assertIsNone(category["services"][0]["image"])
+
+        # Nor is a service's photo borrowed for its category card.
+        self.service.image = "services/own.jpg"
+        self.service.save()
+        category = self.client.get("/api/public/categories/").data[0]
+        self.assertIsNone(category["image"])
+        self.assertEqual(category["services"][0]["image"], "/media/services/own.jpg")
+
+        ServiceCategory.objects.update(image="services/categories/own.jpg")
+        self.assertEqual(self.client.get("/api/public/categories/").data[0]["image"], "/media/services/categories/own.jpg")
 
     def test_portfolio_hides_internal_projects_and_fields(self):
         shown = Project.objects.create(title="Shown", show_in_portfolio=True, budget=50000)

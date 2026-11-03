@@ -59,10 +59,12 @@ Runs every app from your working copy with live reload; no `.env` needed.
 
 ```bash
 ./start.sh     # starts Docker if needed, builds, starts everything and waits until it responds
+./pause.sh     # freezes everything instantly (frees the CPU); ./start.sh resumes where it left off
+./stop.sh      # stops everything; the database and uploads are kept
 ```
 
-The first run also adds a `start proj` command to bash, zsh and fish, so from then on you can
-start the project from any folder (in a new terminal).
+The first run also adds `start proj`, `pause proj` and `stop proj` commands to bash, zsh and fish,
+so from then on you can control the project from any folder (in a new terminal).
 
 On Linux, install Docker Engine with the Compose and Buildx plugins (Arch:
 `sudo pacman -S docker docker-compose docker-buildx`), start it with
@@ -81,7 +83,6 @@ has its own database, so share schema changes as migrations.
 ```bash
 docker compose -f docker-compose.dev.yml logs -f backend     # follow one service's logs
 docker compose -f docker-compose.dev.yml exec backend python manage.py makemigrations
-docker compose -f docker-compose.dev.yml down                # stop, keep the data
 docker compose -f docker-compose.dev.yml down -v             # stop and wipe database & uploads
 ```
 

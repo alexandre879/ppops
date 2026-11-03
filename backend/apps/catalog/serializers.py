@@ -13,7 +13,7 @@ class ServiceCategorySerializer(TranslatedFieldsMixin, BaseModelSerializer):
     class Meta:
         model = ServiceCategory
         fields = [
-            "id", "name", "slug", "description", "icon", "order", "is_published", "service_count",
+            "id", "name", "slug", "description", "icon", "image", "order", "is_published", "service_count",
             *translated("name", "description"),
         ]
         read_only_fields = ["name", "description"]

@@ -51,11 +51,13 @@ class PublicServiceListSerializer(BaseModelSerializer):
 
 
 class PublicCategorySerializer(BaseModelSerializer):
+    # Each category card and each service shows only its own photo: one material photo is
+    # often linked to several services, and borrowing it would repeat the same picture.
     services = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceCategory
-        fields = ["name", "slug", "description", "icon", "services"]
+        fields = ["name", "slug", "description", "icon", "image", "services"]
 
     def get_services(self, obj) -> list[dict]:
         return [

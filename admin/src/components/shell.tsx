@@ -31,6 +31,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useState, type ReactNode } from "react";
 
+import { BrandMark } from "@/components/brand-mark";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { CHOICES, choiceLabel } from "@/lib/choices";
@@ -95,11 +96,7 @@ function activeHref(pathname: string) {
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5 px-2">
-      <svg viewBox="0 0 40 40" className="h-8 w-8 shrink-0" aria-hidden>
-        <rect width="40" height="40" rx="8" fill="#f26b1d" />
-        <path d="M9 20.5 20 11l11 9.5" fill="none" stroke="#1c1917" strokeWidth="3.2" strokeLinejoin="round" />
-        <path d="M13 19v11h5.5v-6h3v6H27V19" fill="#1c1917" />
-      </svg>
+      <BrandMark />
       <span className="leading-tight">
         <span className="block text-sm font-bold text-white">New House Modern</span>
         <span className="block text-[11px] font-medium text-stone-400">{t("Management platform")}</span>

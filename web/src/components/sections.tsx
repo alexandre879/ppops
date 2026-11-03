@@ -115,14 +115,12 @@ export function ContactSection({
       id="contact"
       className={`relative isolate overflow-clip bg-stone-950 text-white ${page ? "pt-28 pb-20 sm:pt-36 sm:pb-28 lg:pt-44" : "py-20 sm:py-28"}`}
     >
-      <LiquidBackdrop />
-      <div className="bg-blueprint mask-soft absolute inset-0 -z-10" aria-hidden />
       <Container className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
         <div>
           {page ? (
             <div className="animate-rise">
               <Eyebrow light>{page.eyebrow}</Eyebrow>
-              <h1 className="text-sheen mt-4 pb-1 text-4xl font-extrabold sm:text-5xl">{page.title}</h1>
+              <h1 className="mt-4 pb-1 text-4xl font-extrabold text-white sm:text-5xl">{page.title}</h1>
               <p className="mt-5 text-lg leading-relaxed text-stone-300">{page.description}</p>
             </div>
           ) : (
@@ -132,7 +130,7 @@ export function ContactSection({
             {site.phones.map((phone) => (
               <li key={phone}>
                 <a href={telHref(phone)} className="group flex items-center gap-4">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 ring-1 ring-white/12 transition duration-300 group-hover:bg-brand-500 group-hover:text-stone-950 group-hover:shadow-[0_0_24px_rgb(242_107_29/0.6)]">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 ring-1 ring-white/12 transition duration-300 group-hover:bg-brand-500 group-hover:text-stone-950">
                     <Phone className="h-5 w-5" aria-hidden />
                   </span>
                   <span className="text-lg font-semibold">{phone}</span>
@@ -160,7 +158,7 @@ export function ContactSection({
           </ul>
         </div>
         <div
-          className={`${page ? "animate-rise [animation-delay:200ms]" : "reveal"} rounded-4xl border border-white/50 bg-white/0.94 p-6 text-stone-900 shadow-[inset_0_1px_0_#fff,0_40px_90px_-30px_rgb(0_0_0/0.7)] backdrop-blur-2xl sm:p-9`}
+          className={`${page ? "animate-rise [animation-delay:200ms]" : "reveal"} rounded-4xl bg-white p-6 text-stone-900 shadow-xl sm:p-9`}
         >
           <EnquiryForm services={serviceOptions(categories)} defaultService={defaultService} lang={lang} t={dict.form} />
         </div>

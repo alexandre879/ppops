@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # Starts the development stack (database, Redis, backend, website, admin) and
-# waits until every app responds. Run ./start.sh once; after that `start proj`
-# works from any folder in a new terminal.
+# waits until every app responds; also resumes a project paused with ./pause.sh.
+# Run ./start.sh once; after that `start proj`, `stop proj` and `pause proj` work
+# from any folder in a new terminal.
 set -euo pipefail
 cd "$(dirname "$0")"
 
 compose() { docker compose -f docker-compose.dev.yml "$@"; }
+
+# True when no container is failing its health check (a pipe into grep could hide the result).
+none_unhealthy() { [[ "$(compose ps --format '{{.Health}}')" != *unhealthy* ]]; }
 
 # Retries a command every 2 seconds for up to 5 minutes.
 wait_until() {
@@ -16,12 +20,12 @@ wait_until() {
   return 1
 }
 
-# Adds a `start proj` command to bash, zsh and fish. Runs on every start but only
-# writes when the command is missing or points at a checkout that has moved.
+# Adds `start proj`, `stop proj` and `pause proj` commands to bash, zsh and fish. Runs on every
+# start but only writes when a command is missing or points at a checkout that has moved.
 install_shortcut() {
-  local script="$PWD/start.sh"
+  # The marker keeps its original name so blocks written by older versions get replaced.
   local begin="# >>> ppops: start proj >>>" end="# <<< ppops: start proj <<<"
-  local added="" rc
+  local names="start stop pause" added="" rc name block="" missing
   local rcs=("$HOME/.bashrc")
   # Login bash shells (macOS terminals, VS Code) skip ~/.bashrc unless ~/.bash_profile loads it.
   if [ -f "$HOME/.bash_profile" ] && ! grep -q bashrc "$HOME/.bash_profile"; then
@@ -29,31 +33,40 @@ install_shortcut() {
   fi
   if command -v zsh >/dev/null 2>&1; then rcs+=("$HOME/.zshrc"); fi
 
+  # Anything other than `<name> proj` goes to whatever command already has that name.
+  for name in $names; do
+    block="$block$(printf '\n%s() {\n  if [ "$1" = proj ]; then "%s"; else command %s "$@"; fi\n}' "$name" "$PWD/$name.sh" "$name")"
+  done
+
   for rc in "${rcs[@]}"; do
-    grep -qF "\"$script\"" "$rc" 2>/dev/null && continue
+    missing=""
+    for name in $names; do
+      grep -qF "\"$PWD/$name.sh\"" "$rc" 2>/dev/null || missing=1
+    done
+    [ -z "$missing" ] && continue
     if grep -qF "$begin" "$rc" 2>/dev/null; then
       awk -v b="$begin" -v e="$end" '$0 == b { skip = 1 } !skip { print } $0 == e { skip = 0 }' "$rc" > "$rc.ppops-tmp"
       cat "$rc.ppops-tmp" > "$rc" && rm "$rc.ppops-tmp"
     fi
-    # Anything other than `start proj` goes to whatever `start` command already exists.
-    printf '\n%s\nstart() {\n  if [ "$1" = proj ]; then "%s"; else command start "$@"; fi\n}\n%s\n' \
-      "$begin" "$script" "$end" >> "$rc"
+    printf '\n%s%s\n%s\n' "$begin" "$block" "$end" >> "$rc"
     added="$added ~${rc#"$HOME"}"
   done
 
   if command -v fish >/dev/null 2>&1; then
-    rc="$HOME/.config/fish/functions/start.fish"
-    # Never overwrite a start.fish we didn't write.
-    if ! grep -qF "\"$script\"" "$rc" 2>/dev/null && { [ ! -e "$rc" ] || grep -qF "$begin" "$rc"; }; then
-      mkdir -p "$(dirname "$rc")"
-      printf '%s\nfunction start\n    if test "$argv[1]" = proj\n        "%s"\n    else\n        command start $argv\n    end\nend\n%s\n' \
-        "$begin" "$script" "$end" > "$rc"
-      added="$added ~${rc#"$HOME"}"
-    fi
+    for name in $names; do
+      rc="$HOME/.config/fish/functions/$name.fish"
+      # Never overwrite a fish function we didn't write.
+      if ! grep -qF "\"$PWD/$name.sh\"" "$rc" 2>/dev/null && { [ ! -e "$rc" ] || grep -qF "$begin" "$rc"; }; then
+        mkdir -p "$(dirname "$rc")"
+        printf '%s\nfunction %s\n    if test "$argv[1]" = proj\n        "%s"\n    else\n        command %s $argv\n    end\nend\n%s\n' \
+          "$begin" "$name" "$PWD/$name.sh" "$name" "$end" > "$rc"
+        added="$added ~${rc#"$HOME"}"
+      fi
+    done
   fi
 
   if [ -n "$added" ]; then
-    echo "Added the 'start proj' command to:$added. Open a new terminal to use it."
+    echo "Added the 'start proj', 'stop proj' and 'pause proj' commands to:$added. Open a new terminal to use them."
   fi
 }
 
@@ -75,6 +88,18 @@ if ! docker info >/dev/null 2>&1; then
     echo "On 'permission denied': sudo usermod -aG docker \$USER, then log out and back in." >&2
     exit 1
   fi
+fi
+
+# Docker refuses to start a paused container, so resume a project paused with ./pause.sh first
+# (only the paused services: unpausing one that isn't paused is an error).
+paused=$(compose ps --status paused --services)
+if [ -n "$paused" ]; then
+  echo "Resuming the paused project..."
+  # shellcheck disable=SC2086 # one service name per word
+  compose unpause $paused >/dev/null
+  # Docker reports a just-unpaused database as unhealthy until its next health check (~5 s),
+  # and `up` gives up at once on services that depend on it, leaving them stopped.
+  wait_until none_unhealthy || true
 fi
 
 # Mount points for the volumes in docker-compose.dev.yml. Creating them first keeps
@@ -100,5 +125,6 @@ Project is running:
   API docs  http://localhost:8000/api/docs/
 
 Logs:  docker compose -f docker-compose.dev.yml logs -f
-Stop:  docker compose -f docker-compose.dev.yml down
+Pause: ./pause.sh   (./start.sh resumes)
+Stop:  ./stop.sh
 EOF

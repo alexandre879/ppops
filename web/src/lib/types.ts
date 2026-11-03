@@ -28,6 +28,7 @@ export type Category = {
   slug: string;
   description: string;
   icon: CategoryIcon;
+  image: string | null;
   services: ServiceRef[];
 };
 
