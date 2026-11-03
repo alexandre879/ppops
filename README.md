@@ -53,6 +53,38 @@ content: services, categories, materials & solutions, manufactured products and 
 administrator. `SEED_ARGS=--demo` additionally creates sample customers, projects, quotations
 and stock so the platform can be explored — **never use `--demo` in production**.
 
+## Development with Docker
+
+Runs every app from your working copy with live reload; no `.env` needed.
+
+```bash
+./start.sh     # starts Docker if needed, builds, starts everything and waits until it responds
+```
+
+The first run also adds a `start proj` command to bash, zsh and fish, so from then on you can
+start the project from any folder (in a new terminal).
+
+On Linux, install Docker Engine with the Compose and Buildx plugins (Arch:
+`sudo pacman -S docker docker-compose docker-buildx`), start it with
+`sudo systemctl enable --now docker`, and add yourself to the `docker` group. The containers
+run as user id 1000, so the checkout should belong to that user (`id -u` prints `1000`).
+
+- Website: <http://localhost:3000>
+- Admin platform: <http://localhost:3001> — [demo accounts](#demo-accounts-seed---demo), admin password `ChangeMe-2026!`
+- API docs: <http://localhost:8000/api/docs/> · Django admin: <http://localhost:8000/django-admin/>
+- PostgreSQL: `localhost:5433`, user/password/database `nhm` / `nhm` / `newhousemodern`
+
+Saving a file reloads Django or Next.js. After `git pull`, run the same command again: it applies
+new migrations, reinstalls changed Python or npm packages and recreates what changed. Each machine
+has its own database, so share schema changes as migrations.
+
+```bash
+docker compose -f docker-compose.dev.yml logs -f backend     # follow one service's logs
+docker compose -f docker-compose.dev.yml exec backend python manage.py makemigrations
+docker compose -f docker-compose.dev.yml down                # stop, keep the data
+docker compose -f docker-compose.dev.yml down -v             # stop and wipe database & uploads
+```
+
 ## Local development (without Docker)
 
 Requirements: Python 3.12+, Node 22, PostgreSQL.
