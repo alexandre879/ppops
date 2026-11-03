@@ -55,7 +55,7 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 lg:pt-4">
       <div
         className={clsx(
-          "glass-dark mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 rounded-full pr-2 pl-4 text-white transition-[background-color,box-shadow] duration-500 lg:h-16 lg:pr-2.5 lg:pl-5",
+          "glass-dark mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 rounded-full pr-2 pl-4 text-white transition-[background-color,box-shadow] duration-500 lg:h-16 lg:pr-2.5 lg:pl-5",
           (scrolled || open) && "bg-stone-950/85 shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_20px_50px_-20px_rgb(0_0_0/0.7)]",
         )}
       >
@@ -69,7 +69,7 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
               key={item.href}
               href={localePath(lang, item.href)}
               className={clsx(
-                "rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors duration-300",
+                "rounded-full px-3.5 py-2 text-sm font-semibold whitespace-nowrap transition-colors duration-300",
                 isActive(item.href)
                   ? "bg-white/12 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.1)]"
                   : "text-stone-300 hover:bg-white/6 hover:text-white",
@@ -81,7 +81,7 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 xl:flex">
+        <div className="hidden items-center gap-2.5 xl:flex">
           <Suspense>
             <LanguageSwitcher lang={lang} label={t.language} />
           </Suspense>
@@ -91,7 +91,7 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
               {phone}
             </a>
           )}
-          <Link href={localePath(lang, "/contact")} className={buttonClass("primary", "px-5 py-2.5 whitespace-nowrap")}>
+          <Link href={localePath(lang, "/contact")} className={buttonClass("primary", "h-11 shrink-0 px-5 py-0 whitespace-nowrap")}>
             {t.getEstimate}
           </Link>
         </div>
