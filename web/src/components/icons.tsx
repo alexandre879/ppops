@@ -1,4 +1,5 @@
 import { Brush, Building2, Factory, Hammer, Layers, ShieldCheck, Sofa, type LucideIcon } from "lucide-react";
+import Image from "next/image";
 
 import type { CategoryIcon } from "@/lib/types";
 
@@ -20,16 +21,15 @@ export function CategoryIconView({ icon, className }: { icon: CategoryIcon; clas
 export function Logo({ light = false }: { light?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
-      <svg viewBox="0 0 40 40" className="h-9 w-9 shrink-0" aria-hidden>
-        <rect width="40" height="40" rx="8" fill="#f26b1d" />
-        <path d="M9 20.5 20 11l11 9.5" fill="none" stroke="#1c1917" strokeWidth="3.2" strokeLinejoin="round" />
-        <path d="M13 19v11h5.5v-6h3v6H27V19" fill="#1c1917" />
-      </svg>
+      {/* The emblem's teal and gold need a light ground to read on the dark header and footer. */}
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-[inset_0_0_0_1px_rgb(0_0_0/0.06)]">
+        <Image src="/logo-mark.png" alt="" width={203} height={166} loading="eager" className="h-auto w-8" />
+      </span>
       <span className="leading-none whitespace-nowrap">
         <span className={`block font-display text-[15px] font-extrabold tracking-tight ${light ? "text-white" : "text-stone-950"}`}>
           NEW HOUSE
         </span>
-        <span className={`block text-[10.5px] font-semibold tracking-[0.32em] ${light ? "text-brand-400" : "text-brand-700"}`}>
+        <span className={`mt-0.5 block text-[10.5px] font-semibold tracking-[0.32em] ${light ? "text-[#d4b06a]" : "text-[#9a7a3c]"}`}>
           WORLD
         </span>
       </span>
