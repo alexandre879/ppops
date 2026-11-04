@@ -1,5 +1,6 @@
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
+from django.utils import translation
 from django.utils.translation import gettext as _
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
@@ -11,9 +12,11 @@ from apps.catalog.models import Service, ServiceCategory, Solution
 from apps.core.models import SiteSettings
 from apps.crm.models import Source
 from apps.inventory.models import Product
-from apps.projects.models import Project, ProjectPhoto
 
+from . import assistant
+from .queries import portfolio_projects
 from .serializers import (
+    AssistantRequestSerializer,
     EnquiryCreateSerializer,
     PublicCategorySerializer,
     PublicProductSerializer,
@@ -33,18 +36,6 @@ class PublicMixin:
     throttle_scope = "public"
     pagination_class = None
     filter_backends = []
-
-
-def portfolio_projects():
-    return (
-        Project.objects.filter(show_in_portfolio=True)
-        .exclude(status=Project.Status.CANCELLED)
-        .prefetch_related(
-            "services",
-            Prefetch("photos", queryset=ProjectPhoto.objects.filter(is_public=True), to_attr="public_photos"),
-        )
-        .order_by("-is_featured", "-completed_date", "-created_at")
-    )
 
 
 class SiteView(PublicMixin, APIView):
@@ -135,3 +126,27 @@ class EnquiryCreateView(PublicMixin, generics.CreateAPIView):
             serializer.save(source=Source.WEBSITE, ip_address=BaseThrottle().get_ident(request))
         # Bots get the same success response so they don't retry.
         return Response({"detail": _("Thank you! We will contact you shortly.")}, status=status.HTTP_201_CREATED)
+
+
+class AssistantView(PublicMixin, APIView):
+    """The website's AI assistant. GET reports whether it is switched on; POST asks a question.
+
+    The website shows its own translated messages, so errors carry a ``code`` rather than text.
+    """
+
+    def get_throttles(self):
+        # Checking the status is as cheap as any public read; only questions cost money.
+        self.throttle_scope = "assistant" if self.request.method == "POST" else "public"
+        return super().get_throttles()
+
+    def get(self, request):
+        return Response({"enabled": assistant.is_enabled()})
+
+    def post(self, request):
+        serializer = AssistantRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            reply = assistant.answer(serializer.validated_data["messages"], translation.get_language())
+        except assistant.AssistantUnavailable:
+            return Response({"code": "unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        return Response({"answer": reply.text, "sources": reply.sources})

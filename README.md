@@ -152,6 +152,27 @@ hides what a role cannot use.
 > The material prices, labour rate and recipes created by `seed` are **placeholders** —
 > review them in *Materials stock*, *Services → recipe* and *Settings → Pricing*.
 
+## Website AI assistant
+
+The glowing button at the bottom right of every website page opens a chat that answers
+visitors' questions **only from the company's own website content** (retrieval-augmented
+generation):
+
+1. For each question, the backend searches the published content (company profile and
+   contacts, service categories, services and starting prices, materials, products, portfolio
+   projects) in all three languages and picks the most relevant pages
+   (`backend/apps/public/knowledge.py`).
+2. Only those pages go to Claude as search results, with instructions to answer from them
+   alone and to suggest a call or a free estimate when the answer isn't there
+   (`backend/apps/public/assistant.py`).
+3. The reply comes back in the visitor's language, with links to the pages it cites.
+
+Set `ANTHROPIC_API_KEY` in `.env` to switch it on; until then the chat shows *Offline* and
+the company's phone number. Each question is a paid API call (model `claude-opus-5-5`,
+`ASSISTANT_MODEL` to change it), limited per visitor by `THROTTLE_ASSISTANT` (default 30
+an hour). Internal data (costs, budgets, customers, labour norms, stock) is never read, and
+content edited in the admin is used from the next question on.
+
 ## Security notes
 
 - Access tokens (15 min) live in memory; the refresh token is an **httpOnly, SameSite=Lax**

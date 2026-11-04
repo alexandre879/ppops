@@ -3,6 +3,7 @@ import { Inter, Manrope, Noto_Sans_Georgian } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { AiAssistant } from "@/components/ai-assistant";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -59,6 +60,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <main id="main">{children}</main>
         <SiteFooter lang={lang} dict={dict} site={site} categories={categories} />
         <ScrollReveal />
+        <AiAssistant lang={lang} t={dict.assistant} phones={site.phones} company={site.company_name} />
       </body>
     </html>
   );

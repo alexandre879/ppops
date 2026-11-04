@@ -24,7 +24,7 @@ class PublicSiteSerializer(BaseModelSerializer):
         ]
 
     def get_phones(self, obj) -> list[str]:
-        return [p for p in (obj.phone_primary, obj.phone_secondary, obj.phone_tertiary) if p]
+        return obj.phones
 
 
 class PublicSolutionSerializer(BaseModelSerializer):
@@ -154,3 +154,30 @@ class EnquiryCreateSerializer(serializers.ModelSerializer):
         if not (attrs.get("phone") or attrs.get("email")):
             raise serializers.ValidationError({"phone": _("Please leave a phone number or an email so we can reply.")})
         return attrs
+
+
+class AssistantMessageSerializer(serializers.Serializer):
+    role = serializers.ChoiceField(choices=["user", "assistant"])
+    content = serializers.CharField(max_length=4000)
+
+
+class AssistantRequestSerializer(serializers.Serializer):
+    """A chat with the website assistant: earlier turns plus the visitor's new question last."""
+
+    MAX_QUESTION_LENGTH = 1000
+    # Earlier turns give follow-up questions their context; older ones are dropped, not rejected.
+    MAX_MESSAGES = 12
+
+    messages = AssistantMessageSerializer(many=True, allow_empty=False)
+
+    def validate_messages(self, messages):
+        if len(messages) > 50:
+            raise serializers.ValidationError("Too many messages.")
+        messages = messages[-self.MAX_MESSAGES :]
+        while messages and messages[0]["role"] != "user":
+            messages = messages[1:]
+        if not messages or messages[-1]["role"] != "user":
+            raise serializers.ValidationError("The last message must be the visitor's question.")
+        if len(messages[-1]["content"]) > self.MAX_QUESTION_LENGTH:
+            raise serializers.ValidationError(f"Questions are limited to {self.MAX_QUESTION_LENGTH} characters.")
+        return messages
