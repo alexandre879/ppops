@@ -91,7 +91,7 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
               {phone}
             </a>
           )}
-          <Link href={localePath(lang, "/contact")} className={buttonClass("primary", "h-11 shrink-0 px-5 py-0 whitespace-nowrap")}>
+          <Link href={localePath(lang, "/contact")} className={buttonClass("primary", "h-11 shrink-0 px-5! py-0! whitespace-nowrap")}>
             {t.getEstimate}
           </Link>
         </div>
