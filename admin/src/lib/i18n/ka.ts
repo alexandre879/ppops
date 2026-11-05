@@ -607,6 +607,7 @@ const ka: Catalog = {
   "The internal management platform for the New House Modern team.": "New House Modern-ის გუნდის შიდა მართვის პლატფორმა.",
   "The quotation is marked accepted, and a project (budget = quotation total) and a draft contract are created.": "შეთავაზება მოინიშნება დადასტურებულად და შეიქმნება პროექტი (ბიუჯეტი = შეთავაზების ჯამი) და ხელშეკრულების მონახაზი.",
   "Third phone": "მესამე ტელეფონი",
+  "Fourth phone": "მეოთხე ტელეფონი",
   "This cannot be undone.": "ამ მოქმედების გაუქმება შეუძლებელია.",
   "This month: {count}": "ამ თვეში: {count}",
   "Title": "დასახელება",

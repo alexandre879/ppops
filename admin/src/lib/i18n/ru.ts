@@ -607,6 +607,7 @@ const ru: Catalog = {
   "The internal management platform for the New House Modern team.": "Внутренняя платформа управления команды New House Modern.",
   "The quotation is marked accepted, and a project (budget = quotation total) and a draft contract are created.": "Предложение будет отмечено принятым, будут созданы проект (бюджет = сумма предложения) и черновик договора.",
   "Third phone": "Третий телефон",
+  "Fourth phone": "Четвёртый телефон",
   "This cannot be undone.": "Это действие нельзя отменить.",
   "This month: {count}": "За месяц: {count}",
   "Title": "Название",

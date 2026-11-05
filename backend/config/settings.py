@@ -163,6 +163,8 @@ REST_FRAMEWORK = {
         "login": env("THROTTLE_LOGIN", default="10/min"),
         "enquiry": env("THROTTLE_ENQUIRY", default="10/hour"),
         "public": env("THROTTLE_PUBLIC", default="300/min"),
+        # Each assistant question is a paid Claude API call.
+        "assistant": env("THROTTLE_ASSISTANT", default="30/hour"),
     },
     "NUM_PROXIES": env.int("NUM_PROXIES", default=None),
     "COERCE_DECIMAL_TO_STRING": False,
@@ -215,6 +217,11 @@ SPECTACULAR_SETTINGS = {
 
 PDF_FONT_REGULAR = env("PDF_FONT_REGULAR", default="")
 PDF_FONT_BOLD = env("PDF_FONT_BOLD", default="")
+
+# Website AI assistant (apps/public/assistant.py). It answers only from the public website
+# content and stays switched off until an API key is set.
+ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY", default="")
+ASSISTANT_MODEL = env("ASSISTANT_MODEL", default="claude-opus-5-5")
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

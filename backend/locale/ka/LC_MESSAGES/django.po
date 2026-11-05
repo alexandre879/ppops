@@ -200,3 +200,15 @@ msgstr "ასლი"
 
 msgid "You need project management access to start a project."
 msgstr "პროექტის დასაწყებად საჭიროა პროექტების მართვის უფლება."
+
+#: apps/public/knowledge.py
+msgid "About us"
+msgstr "ჩვენ შესახებ"
+
+#: apps/public/knowledge.py
+msgid "Contacts"
+msgstr "კონტაქტი"
+
+#: apps/public/knowledge.py
+msgid "Services"
+msgstr "მომსახურება"

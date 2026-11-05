@@ -200,3 +200,15 @@ msgstr "копия"
 
 msgid "You need project management access to start a project."
 msgstr "Для запуска проекта нужен доступ к управлению проектами."
+
+#: apps/public/knowledge.py
+msgid "About us"
+msgstr "О компании"
+
+#: apps/public/knowledge.py
+msgid "Contacts"
+msgstr "Контакты"
+
+#: apps/public/knowledge.py
+msgid "Services"
+msgstr "Услуги"

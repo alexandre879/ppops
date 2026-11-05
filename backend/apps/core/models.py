@@ -73,6 +73,7 @@ class SiteSettings(SingletonModel):
     phone_primary = models.CharField(max_length=40, default="+995 579 01 32 41")
     phone_secondary = models.CharField(max_length=40, blank=True, default="+995 551 27 77 30")
     phone_tertiary = models.CharField(max_length=40, blank=True, default="+995 593 28 68 94")
+    phone_quaternary = models.CharField(max_length=40, blank=True, default="+995 557 60 30 04")
     email = models.EmailField(blank=True, default="")
     address = models.CharField(max_length=255, blank=True, default="")
     working_hours = models.CharField(max_length=120, blank=True, default="")
@@ -91,3 +92,8 @@ class SiteSettings(SingletonModel):
 
     def __str__(self):
         return self.company_name
+
+    @property
+    def phones(self) -> list[str]:
+        """The filled-in phone numbers, main one first."""
+        return [p for p in (self.phone_primary, self.phone_secondary, self.phone_tertiary, self.phone_quaternary) if p]

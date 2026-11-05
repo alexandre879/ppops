@@ -24,6 +24,7 @@
   /* "backwards", not "both": an animation that stays applied after it ends switches off
      backdrop blur for any glass inside the element (Chromium). */
   --animate-rise: rise 0.9s var(--ease-liquid) backwards;
+  --animate-pop: pop 0.35s var(--ease-liquid) backwards;
 
   @keyframes float {
     0%,
@@ -38,6 +39,16 @@
     from {
       opacity: 0;
       transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.97);
     }
     to {
       opacity: 1;
@@ -277,6 +288,42 @@ html:lang(ka) h1 {
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * AI assistant launcher (see <AiAssistant>): a turning halo of light and a soft pulse.
+ * ------------------------------------------------------------------------- */
+
+@layer components {
+  .ai-halo {
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    border-radius: 9999px;
+    background: conic-gradient(from 0deg, #ffcda8, #f26b1d, #bc3e0c, #fd8237, #ffcda8);
+    filter: blur(7px);
+    animation: ai-spin 3.5s linear infinite;
+  }
+  .ai-pulse {
+    animation: ai-pulse 2.6s ease-out infinite;
+  }
+}
+
+@keyframes ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ai-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(242 107 29 / 0.55), 0 0 28px 6px rgb(242 107 29 / 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgb(242 107 29 / 0), 0 0 40px 12px rgb(242 107 29 / 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(242 107 29 / 0), 0 0 28px 6px rgb(242 107 29 / 0.55);
+  }
+}
+
 @keyframes liquid-1 {
   0% {
     transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
@@ -323,8 +370,15 @@ html:lang(ka) h1 {
   .liquid-blob,
   .count-up,
   .animate-float,
-  .animate-rise {
+  .animate-rise,
+  .animate-pop,
+  .ai-halo,
+  .ai-pulse {
     animation: none;
+  }
+  /* The launcher keeps a steady glow instead of pulsing. */
+  .ai-pulse {
+    box-shadow: 0 0 28px 6px rgb(242 107 29 / 0.55);
   }
   .count-up {
     --count: var(--to);
