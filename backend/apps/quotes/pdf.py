@@ -270,9 +270,9 @@ def _render(quotation: Quotation) -> bytes:
         canvas.drawString(MARGIN, height - 13 * mm, site.company_name.upper())
         canvas.setFont(regular, 8)
         canvas.drawString(MARGIN, height - 18.5 * mm, site.tagline[:90])
-        # Up to four numbers, stacked inside the 24 mm header band.
-        for i, phone in enumerate(site.phones[:4]):
-            canvas.drawRightString(width - MARGIN, height - (7.5 + i * 4.2) * mm, phone)
+        # Up to five numbers, stacked inside the 24 mm header band.
+        for i, phone in enumerate(site.phones[:5]):
+            canvas.drawRightString(width - MARGIN, height - (6.5 + i * 3.7) * mm, phone)
         canvas.setStrokeColor(LINE)
         canvas.line(MARGIN, 15 * mm, width - MARGIN, 15 * mm)
         canvas.setFillColor(MUTED)

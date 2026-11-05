@@ -16,8 +16,8 @@ class PublicApiTests(APITestCase):
     def test_site_settings_are_public(self):
         data = self.client.get("/api/public/site/").data
         self.assertEqual(data["company_name"], "New House Modern")
-        self.assertEqual(data["phones"][-1], "+995 557 60 30 04")
-        self.assertEqual(len(data["phones"]), 4)
+        self.assertEqual(data["phones"][-1], "+995 568 28 27 72")
+        self.assertEqual(len(data["phones"]), 5)
 
     def test_only_published_services_are_listed(self):
         titles = [s["title"] for s in self.client.get("/api/public/services/").data]

@@ -24,6 +24,7 @@ const siteFields: FieldDef[] = [
   { name: "phone_secondary", label: t("Second phone"), type: "tel" },
   { name: "phone_tertiary", label: t("Third phone"), type: "tel" },
   { name: "phone_quaternary", label: t("Fourth phone"), type: "tel" },
+  { name: "phone_quinary", label: t("Fifth phone"), type: "tel" },
   { name: "email", label: t("Email"), type: "email" },
   { name: "address", label: t("Address"), type: "translated" },
   { name: "working_hours", label: t("Working hours"), type: "translated", placeholder: t("e.g. Mon–Sat, 09:00–19:00") },
