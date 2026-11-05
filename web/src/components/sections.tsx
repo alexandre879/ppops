@@ -115,6 +115,9 @@ export function ContactSection({
       id="contact"
       className={`relative isolate overflow-clip bg-stone-950 text-white ${page ? "pt-28 pb-20 sm:pt-36 sm:pb-28 lg:pt-44" : "py-20 sm:py-28"}`}
     >
+      <LiquidBackdrop />
+      <div className="bg-blueprint mask-soft absolute inset-0 -z-10" aria-hidden />
+      <div className="absolute inset-x-0 top-0 -z-10 h-px bg-linear-to-r from-transparent via-brand-500/60 to-transparent" aria-hidden />
       <Container className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
         <div>
           {page ? (
@@ -129,18 +132,18 @@ export function ContactSection({
           <ul className={page ? "mt-10 animate-rise space-y-3 [animation-delay:120ms]" : "reveal mt-10 space-y-3"}>
             {site.phones.map((phone) => (
               <li key={phone}>
-                <a href={telHref(phone)} className="group flex items-center gap-4">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 ring-1 ring-white/12 transition duration-300 group-hover:bg-brand-500 group-hover:text-stone-950">
+                <a href={telHref(phone)} className="group flex items-center gap-4 rounded-2xl p-1.5 pr-4 transition duration-300 ease-liquid hover:bg-white/5">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 text-brand-400 shadow-[inset_0_1px_0_rgb(255_255_255/0.1)] ring-1 ring-white/12 backdrop-blur-md transition duration-300 group-hover:bg-brand-500 group-hover:text-stone-950 group-hover:shadow-[0_0_20px_-2px_rgb(242_107_29/0.7)]">
                     <Phone className="h-5 w-5" aria-hidden />
                   </span>
-                  <span className="text-lg font-semibold">{phone}</span>
+                  <span className="text-lg font-semibold tabular-nums">{phone}</span>
                 </a>
               </li>
             ))}
             {site.email && (
               <li>
-                <a href={`mailto:${site.email}`} className="group flex items-center gap-4">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 ring-1 ring-white/12 transition duration-300 group-hover:bg-brand-500 group-hover:text-stone-950">
+                <a href={`mailto:${site.email}`} className="group flex items-center gap-4 rounded-2xl p-1.5 pr-4 transition duration-300 ease-liquid hover:bg-white/5">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 text-brand-400 shadow-[inset_0_1px_0_rgb(255_255_255/0.1)] ring-1 ring-white/12 backdrop-blur-md transition duration-300 group-hover:bg-brand-500 group-hover:text-stone-950 group-hover:shadow-[0_0_20px_-2px_rgb(242_107_29/0.7)]">
                     <Mail className="h-5 w-5" aria-hidden />
                   </span>
                   <span className="text-lg font-semibold">{site.email}</span>
@@ -148,8 +151,8 @@ export function ContactSection({
               </li>
             )}
             {site.working_hours && (
-              <li className="flex items-center gap-4 text-stone-300">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 ring-1 ring-white/12">
+              <li className="flex items-center gap-4 p-1.5 text-stone-300">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/8 text-brand-400 ring-1 ring-white/12 backdrop-blur-md">
                   <Clock className="h-5 w-5" aria-hidden />
                 </span>
                 {site.working_hours}
@@ -157,10 +160,15 @@ export function ContactSection({
             )}
           </ul>
         </div>
-        <div
-          className={`${page ? "animate-rise [animation-delay:200ms]" : "reveal"} rounded-4xl bg-white p-6 text-stone-900 shadow-xl sm:p-9`}
-        >
-          <EnquiryForm services={serviceOptions(categories)} defaultService={defaultService} lang={lang} t={dict.form} />
+        <div className={`${page ? "animate-rise [animation-delay:200ms]" : "reveal"} relative`}>
+          <div
+            className="absolute -inset-px -z-10 rounded-4xl bg-linear-to-br from-brand-400/70 via-brand-500/20 to-transparent blur-[1px]"
+            aria-hidden
+          />
+          <div className="absolute -inset-8 -z-20 rounded-[3rem] bg-brand-500/15 blur-3xl" aria-hidden />
+          <div className="rounded-4xl bg-white p-6 text-stone-900 shadow-[0_40px_90px_-40px_rgb(0_0_0/0.8),0_0_0_1px_rgb(255_255_255/0.06)] sm:p-9">
+            <EnquiryForm services={serviceOptions(categories)} defaultService={defaultService} lang={lang} t={dict.form} />
+          </div>
         </div>
       </Container>
     </section>
