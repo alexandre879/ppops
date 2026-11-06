@@ -17,13 +17,13 @@ import { buttonClass } from "./ui";
 
 type Props = {
   lang: Locale;
-  phone?: string;
+  phones: string[];
   nav: Dictionary["nav"];
   t: Dictionary["header"];
 };
 
 /** Floating glass bar over the page; it turns more solid once the page scrolls. */
-export function SiteHeader({ lang, phone, nav, t }: Props) {
+export function SiteHeader({ lang, phones, nav, t }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -85,11 +85,17 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
           <Suspense>
             <LanguageSwitcher lang={lang} label={t.language} />
           </Suspense>
-          {phone && (
-            <a href={telHref(phone)} className="hidden items-center gap-2 text-sm font-semibold whitespace-nowrap text-stone-200 hover:text-white 2xl:flex">
-              <Phone className="h-4 w-4 text-brand-400" aria-hidden />
-              {phone}
-            </a>
+          {phones.length > 0 && (
+            <div className="hidden items-center gap-2 2xl:flex">
+              <Phone className="h-4 w-4 shrink-0 text-brand-400" aria-hidden />
+              <div className="flex flex-col leading-tight">
+                {phones.map((phone) => (
+                  <a key={phone} href={telHref(phone)} className="text-sm font-semibold whitespace-nowrap text-stone-200 hover:text-white">
+                    {phone}
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
           <Link href={localePath(lang, "/contact")} className={buttonClass("primary", "h-11 shrink-0 px-5! py-0! whitespace-nowrap")}>
             {t.getEstimate}
@@ -141,11 +147,11 @@ export function SiteHeader({ lang, phone, nav, t }: Props) {
               <Link href={localePath(lang, "/contact")} onClick={() => setOpen(false)} className={buttonClass("primary", "w-full")}>
                 {t.getEstimate}
               </Link>
-              {phone && (
-                <a href={telHref(phone)} className={buttonClass("ghostLight", "w-full")}>
+              {phones.map((phone) => (
+                <a key={phone} href={telHref(phone)} className={buttonClass("ghostLight", "w-full")}>
                   <Phone className="h-4 w-4" aria-hidden /> {phone}
                 </a>
-              )}
+              ))}
             </div>
           </div>
         </>

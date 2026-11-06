@@ -78,13 +78,18 @@ export function CtaBand({ site, dict, lang }: { site: Site; dict: Dictionary; la
             <ButtonLink href={localePath(lang, "/contact")} variant="dark" className="whitespace-nowrap">
               {dict.common.getFreeEstimate} <ArrowRight className="h-4 w-4" aria-hidden />
             </ButtonLink>
-            {site.phones[0] && (
-              <a
-                href={telHref(site.phones[0])}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/25 px-6 py-3 text-sm font-semibold whitespace-nowrap text-stone-950 shadow-[inset_0_1px_0_rgb(255_255_255/0.5)] backdrop-blur-md transition duration-300 ease-liquid hover:-translate-y-0.5 hover:bg-white/40"
-              >
-                <Phone className="h-4 w-4" aria-hidden /> {site.phones[0]}
-              </a>
+            {site.phones.length > 0 && (
+              <div className="flex flex-col gap-3">
+                {site.phones.slice(0, 2).map((phone) => (
+                  <a
+                    key={phone}
+                    href={telHref(phone)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/25 px-6 py-3 text-sm font-semibold whitespace-nowrap text-stone-950 shadow-[inset_0_1px_0_rgb(255_255_255/0.5)] backdrop-blur-md transition duration-300 ease-liquid hover:-translate-y-0.5 hover:bg-white/40"
+                  >
+                    <Phone className="h-4 w-4" aria-hidden /> {phone}
+                  </a>
+                ))}
+              </div>
             )}
           </div>
         </div>

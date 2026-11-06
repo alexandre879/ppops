@@ -56,7 +56,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         >
           {dict.header.skip}
         </a>
-        <SiteHeader lang={lang} phone={site.phones[0]} nav={dict.nav} t={dict.header} />
+        <SiteHeader lang={lang} phones={site.phones.slice(0, 2)} nav={dict.nav} t={dict.header} />
         <main id="main">{children}</main>
         <SiteFooter lang={lang} dict={dict} site={site} categories={categories} />
         <ScrollReveal />

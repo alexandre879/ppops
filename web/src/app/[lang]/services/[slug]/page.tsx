@@ -49,12 +49,16 @@ export default async function ServicePage({ params }: Props) {
               <Eyebrow>{service.category.name}</Eyebrow>
               <h1 className="mt-3 text-4xl font-extrabold sm:text-5xl">{service.title}</h1>
               {service.summary && <p className="mt-5 text-lg leading-relaxed text-stone-600">{service.summary}</p>}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-start">
                 <ButtonLink href={contactHref}>{dict.common.requestEstimate}</ButtonLink>
-                {site.phones[0] && (
-                  <a href={telHref(site.phones[0])} className={buttonClass("outline")}>
-                    <Phone className="h-4 w-4" aria-hidden /> {site.phones[0]}
-                  </a>
+                {site.phones.length > 0 && (
+                  <div className="flex flex-col gap-3">
+                    {site.phones.slice(0, 2).map((phone) => (
+                      <a key={phone} href={telHref(phone)} className={buttonClass("outline")}>
+                        <Phone className="h-4 w-4" aria-hidden /> {phone}
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>

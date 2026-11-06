@@ -71,13 +71,17 @@ export default async function HomePage({ params }: Props) {
                   {dict.common.exploreServices}
                 </ButtonLink>
               </div>
-              {site.phones[0] && (
-                <p className="mt-6 text-sm text-stone-400">
-                  {dict.common.orCallUs}{" "}
-                  <a href={telHref(site.phones[0])} className="font-semibold text-white transition-colors hover:text-brand-400">
-                    {site.phones[0]}
-                  </a>
-                </p>
+              {site.phones.length > 0 && (
+                <div className="mt-6 flex items-start gap-1.5 text-sm text-stone-400">
+                  <span>{dict.common.orCallUs}</span>
+                  <span className="flex flex-col gap-0.5">
+                    {site.phones.slice(0, 2).map((phone) => (
+                      <a key={phone} href={telHref(phone)} className="font-semibold text-white transition-colors hover:text-brand-400">
+                        {phone}
+                      </a>
+                    ))}
+                  </span>
+                </div>
               )}
               {stats.length > 0 && (
                 <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-white/10 pt-7">
