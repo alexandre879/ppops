@@ -6,7 +6,7 @@ branch: main
 cost: { minutes: 4, tokens: 19332 }
 id: l-b78371c1
 scope: repo
-status: active
+status: superseded
 src: agent
 touches:
   - backend/apps/core/models.py
