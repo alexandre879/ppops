@@ -185,6 +185,29 @@ content edited in the admin is used from the next question on.
   use real domains in `DJANGO_ALLOWED_HOSTS` / `CSRF_TRUSTED_ORIGINS`, and back up the
   `pgdata`, `media` and `private_media` volumes.
 
+## Production deployment
+
+`newhousemodern.shop` runs on a DigitalOcean Droplet (`k3s-1`) under k3s, in the `ppops`
+namespace. **The Droplet also hosts another app (`blueapp.store`), so take care with its
+resources.** The manifests are in `k8s/`; the website is at `/` and the admin at `/admin`.
+
+**Every push to `main` that changes `backend/`, `web/`, `admin/` or `k8s/` goes live
+automatically.** [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the backend
+tests, then `k8s/deploy.sh`, which:
+
+1. uploads the source to the server and builds the images there;
+2. saves a database dump to `/srv/backups/ppops/` on the server (the last 7 are kept);
+3. restarts the app, which applies any new migrations on start-up.
+
+If the tests or the build fail, the live site is left as it was. You can follow a run, or start
+one by hand, from the **Actions** tab on GitHub. Running `./k8s/deploy.sh` from your own machine
+does the same, but it uploads your local files, including anything uncommitted.
+
+Setup, once: the `DEPLOY_SSH_KEY` repository secret holds a private key whose public half is in
+`/root/.ssh/authorized_keys` on the server. That key gives root on the Droplet, so never share it.
+Secrets the app needs (`ppops-postgres`, `ppops-secrets`) are created once by `deploy.sh` and live
+only on the server; none belong in `k8s/`.
+
 ## Tests & checks
 
 ```bash

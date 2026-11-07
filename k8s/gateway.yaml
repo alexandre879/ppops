@@ -1,0 +1,116 @@
+# One address for everything, unlike nginx/default.conf in docker-compose, which uses two ports:
+#   /admin        the admin platform (built with basePath /admin)
+#   /api/         the REST API; the admin calls it from the same origin, so the refresh cookie just works
+#   /django-admin/, /static/   Django's built-in admin (superusers) and its static files
+#   /media/       public uploads
+#   everything else           the public website
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-nginx
+data:
+  default.conf: |
+    # Keep the scheme Traefik saw (https); fall back to our own.
+    map $http_x_forwarded_proto $forwarded_proto {
+      default $http_x_forwarded_proto;
+      ""      $scheme;
+    }
+
+    proxy_http_version 1.1;
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $forwarded_proto;
+
+    server {
+      listen 8080;
+      client_max_body_size 25m;
+
+      location = /admin {
+        proxy_pass http://admin:3000;
+      }
+      location /admin/ {
+        proxy_pass http://admin:3000;
+      }
+
+      location /api/ {
+        proxy_pass http://backend:8000;
+        proxy_read_timeout 60s;
+      }
+
+      location /django-admin/ {
+        proxy_pass http://backend:8000;
+      }
+      location /static/ {
+        proxy_pass http://backend:8000;
+      }
+
+      # Public uploads (Pillow-validated images only; private files never live here).
+      location /media/ {
+        alias /srv/media/;
+        expires 7d;
+        add_header Cache-Control "public";
+        add_header X-Content-Type-Options "nosniff";
+      }
+
+      location / {
+        proxy_pass http://web:3000;
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
+  selector:
+    app: gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/nginx/conf.d
+            - name: media
+              mountPath: /srv/media
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: gateway-nginx
+        # The backend's upload volume; both pods run on the one node, so they can share it.
+        - name: media
+          persistentVolumeClaim:
+            claimName: media

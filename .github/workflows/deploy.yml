@@ -1,0 +1,80 @@
+# Deploys to newhousemodern.shop on every push to main that changes the app.
+# See "Production deployment" in the README. Needs the DEPLOY_SSH_KEY repository secret.
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "web/**"
+      - "admin/**"
+      - "k8s/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+# The server builds the images itself, so two deploys must never overlap. A newer push waits.
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      DJANGO_DEBUG: "True"
+      DATABASE_URL: postgres://postgres:test@localhost:5432/postgres
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python manage.py test apps
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the deploy key
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          # The server's public host key, pinned so the deploy can't be sent to an impostor.
+          SERVER_HOST_KEY: 209.38.108.180 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPk/uoCvxpvtp/9KziearLkFI7HSpwV7QFGkyqY9JTtu
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SERVER_HOST_KEY" >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: SSH_KEY="$HOME/.ssh/deploy_key" ./k8s/deploy.sh
+
+      - name: Check the live site
+        run: |
+          curl -fsS --retry 6 --retry-delay 10 --retry-all-errors -o /dev/null https://newhousemodern.shop/en
+          curl -fsS --retry 6 --retry-delay 10 --retry-all-errors -o /dev/null https://newhousemodern.shop/admin/login

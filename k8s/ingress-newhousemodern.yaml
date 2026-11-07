@@ -1,0 +1,32 @@
+# https://newhousemodern.shop and www; the admin is the /admin path of the site (see gateway.yaml).
+# Separate from ingress.yaml so each domain's Let's Encrypt certificates are requested independently.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: newhousemodern
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+spec:
+  rules:
+    - host: newhousemodern.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  name: http
+    - host: www.newhousemodern.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  name: http

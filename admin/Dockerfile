@@ -23,8 +23,11 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG API_PROXY_TARGET=http://backend:8000
 # Inlined into the browser bundle ("View website" link).
 ARG NEXT_PUBLIC_SITE_URL=http://localhost:8080
+# Empty serves the admin at /; production builds with /admin.
+ARG NEXT_PUBLIC_BASE_PATH=
 ENV API_PROXY_TARGET=$API_PROXY_TARGET \
-    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
+    NEXT_PUBLIC_BASE_PATH=$NEXT_PUBLIC_BASE_PATH
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

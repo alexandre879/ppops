@@ -1,0 +1,21 @@
+# Traefik gets the certificate from Let's Encrypt and hands the site to the gateway.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ppops
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+spec:
+  rules:
+    - host: ppops.blueapp.store
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  name: http

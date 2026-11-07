@@ -5,6 +5,9 @@ import type { NextConfig } from "next";
 // before they reach Next.js; in development Next.js proxies them.
 const backend = process.env.API_PROXY_TARGET ?? "http://localhost:8000";
 
+// Set when the admin is served under a path of the website (production: /admin).
+// The API stays at /api on the same origin, so API calls and the refresh cookie are unaffected.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 // Sent with every response. HSTS only over HTTPS (nginx/TLS proxy sets X-Forwarded-Proto).
 const securityHeaders = [
@@ -21,6 +24,7 @@ const overHttps = [{ type: "header" as const, key: "x-forwarded-proto", value: "
 const adminCsp = "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'";
 
 const nextConfig: NextConfig = {
+  basePath,
   output: "standalone",
   poweredByHeader: false,
   skipTrailingSlashRedirect: true,

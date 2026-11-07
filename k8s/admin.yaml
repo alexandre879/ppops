@@ -1,0 +1,52 @@
+# The admin platform (Next.js standalone build). Its "View website" link is baked in at build time
+# (NEXT_PUBLIC_SITE_URL, set by deploy.sh).
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin
+spec:
+  selector:
+    app: admin
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+        - name: admin
+          image: ppops-admin:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: NODE_OPTIONS
+              value: --max-old-space-size=192
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 30m
+              memory: 96Mi
+            limits:
+              memory: 256Mi
