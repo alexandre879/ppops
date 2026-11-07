@@ -1,0 +1,24 @@
+# Non-secret settings for the backend and the website. DJANGO_SECRET_KEY and the database
+# password live in secrets that deploy.sh creates once.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ppops-config
+data:
+  DJANGO_DEBUG: "False"
+  # "backend" is how the website's server-side code reaches the API inside the cluster.
+  DJANGO_ALLOWED_HOSTS: newhousemodern.shop,www.newhousemodern.shop,ppops.blueapp.store,backend
+  CSRF_TRUSTED_ORIGINS: https://newhousemodern.shop,https://www.newhousemodern.shop,https://ppops.blueapp.store
+  CORS_ALLOWED_ORIGINS: https://newhousemodern.shop,https://www.newhousemodern.shop,https://ppops.blueapp.store
+  # Traefik redirects http to https; inside the cluster the website calls the API over plain http.
+  SECURE_SSL_REDIRECT: "False"
+  SECURE_COOKIES: "True"
+  AUTH_COOKIE_SECURE: "True"
+  # Traefik and the gateway each add themselves to X-Forwarded-For.
+  NUM_PROXIES: "2"
+  CACHE_URL: redis://redis:6379/0
+  MEDIA_ROOT: /app/media
+  PRIVATE_MEDIA_ROOT: /app/private_media
+  SEED_ON_START: "false"
+  API_INTERNAL_URL: http://backend:8000
+  SITE_URL: https://newhousemodern.shop

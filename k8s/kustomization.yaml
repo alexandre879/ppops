@@ -1,0 +1,21 @@
+# ppops (New House Modern) on the DigitalOcean k3s server it shares with educational_system.
+#   Website  https://newhousemodern.shop (also https://ppops.blueapp.store)
+#   Admin    https://newhousemodern.shop/admin
+# deploy.sh builds the images on the server and applies this with: kubectl apply -k k8s
+# The secrets (ppops-postgres, ppops-secrets) are created by deploy.sh, not stored here.
+#
+# Moving to another domain: change the hosts in config.yaml and the ingress files, and SITE_URL in deploy.sh.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ppops
+resources:
+  - namespace.yaml
+  - config.yaml
+  - postgres.yaml
+  - redis.yaml
+  - backend.yaml
+  - web.yaml
+  - admin.yaml
+  - gateway.yaml
+  - ingress.yaml
+  - ingress-newhousemodern.yaml

@@ -1,0 +1,61 @@
+# The public website (Next.js standalone build).
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: ppops-web:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: API_INTERNAL_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: ppops-config
+                  key: API_INTERNAL_URL
+            - name: SITE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: ppops-config
+                  key: SITE_URL
+            - name: NODE_OPTIONS
+              value: --max-old-space-size=192
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 30m
+              memory: 96Mi
+            limits:
+              memory: 256Mi
