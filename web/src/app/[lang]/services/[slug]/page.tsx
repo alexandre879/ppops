@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(lang)) return {};
   const service = await getService(lang, slug);
   if (!service) return { title: getDictionary(lang).serviceDetail.notFound };
-  return { title: service.title, description: service.summary, alternates: languageAlternates(`/services/${slug}`) };
+  return { title: service.title, description: service.summary, alternates: languageAlternates(lang, `/services/${slug}`) };
 }
 
 export default async function ServicePage({ params }: Props) {

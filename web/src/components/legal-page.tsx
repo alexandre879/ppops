@@ -55,7 +55,7 @@ export function legalMetadata(slug: LegalSlug) {
     const legal = getLegal(lang);
     const doc = legal.docs[slug];
     const site = await getSite(lang);
-    return { title: doc.title, description: fmt(doc.description, vars(site, legal.labels.idCode)), alternates: languageAlternates(`/${slug}`) };
+    return { title: doc.title, description: fmt(doc.description, vars(site, legal.labels.idCode)), alternates: languageAlternates(lang, `/${slug}`) };
   };
 }
 

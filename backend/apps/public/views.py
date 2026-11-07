@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.throttling import BaseThrottle, ScopedRateThrottle
+from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView
 
 from apps.catalog.models import Service, ServiceCategory, Solution
@@ -28,12 +28,13 @@ from .serializers import (
     PublicSiteSerializer,
     PublicSolutionSerializer,
 )
+from .throttling import VisitorRateThrottle
 
 
 class PublicMixin:
     authentication_classes = []
     permission_classes = [AllowAny]
-    throttle_classes = [ScopedRateThrottle]
+    throttle_classes = [VisitorRateThrottle]
     throttle_scope = "public"
     pagination_class = None
     filter_backends = []

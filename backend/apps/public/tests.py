@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django.core.cache import cache
 from rest_framework.test import APITestCase
 
@@ -5,6 +7,35 @@ from apps.catalog.models import Service, ServiceCategory, Solution
 from apps.core.models import SiteSettings
 from apps.crm.models import Enquiry, Source
 from apps.projects.models import Project, ProjectPhoto
+
+from .throttling import VisitorRateThrottle
+
+
+class VisitorRateLimitTests(APITestCase):
+    URL = "/api/public/site/"
+
+    def setUp(self):
+        cache.clear()
+        self.addCleanup(cache.clear)
+        patcher = mock.patch.object(VisitorRateThrottle, "THROTTLE_RATES", {"public": "2/min"})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def visit(self, address):
+        return self.client.get(self.URL, HTTP_X_FORWARDED_FOR=address).status_code
+
+    def test_the_website_server_is_never_limited(self):
+        for _ in range(5):
+            self.assertEqual(self.client.get(self.URL).status_code, 200)
+
+    def test_each_visitor_has_their_own_limit(self):
+        self.assertEqual([self.visit("203.0.113.1") for _ in range(3)], [200, 200, 429])
+        self.assertEqual(self.visit("203.0.113.2"), 200)
+
+    def test_the_website_keeps_working_when_a_visitor_hits_the_limit(self):
+        for _ in range(3):
+            self.visit("203.0.113.1")
+        self.assertEqual(self.client.get(self.URL).status_code, 200)
 
 
 class PublicApiTests(APITestCase):
