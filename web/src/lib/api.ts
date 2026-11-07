@@ -29,6 +29,8 @@ const FALLBACK_SITE: Site = {
   phones: ["+995 557 60 30 04", "+995 568 28 27 72"],
   email: "",
   address: "",
+  legal_name: "",
+  registration_code: "",
   working_hours: "",
   facebook_url: "",
   instagram_url: "",

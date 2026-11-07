@@ -81,6 +81,18 @@ class ProjectDocumentViewSet(PrivateFileDownloadMixin, ProjectChildViewSet):
     filterset_fields = ["project", "kind"]
     owner_field = "uploaded_by"
 
+    # Every role may read projects, but commercial documents follow the stricter module
+    # that owns them, so site staff cannot list or download contracts by changing an ID.
+    RESTRICTED_KINDS = {
+        ProjectDocument.Kind.CONTRACT: "crm",
+        ProjectDocument.Kind.ESTIMATE: "quotes",
+        ProjectDocument.Kind.INVOICE: "finance",
+    }
+
+    def get_queryset(self):
+        hidden = [kind for kind, module in self.RESTRICTED_KINDS.items() if not self.request.user.can(module, "read")]
+        return super().get_queryset().exclude(kind__in=hidden)
+
 
 class ProjectExpenseViewSet(ProjectChildViewSet):
     permission_module = "finance"

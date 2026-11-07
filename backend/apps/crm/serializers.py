@@ -45,7 +45,7 @@ class EnquirySerializer(BaseModelSerializer):
         fields = [
             "id", "name", "email", "phone", "company", "service", "service_title", "subject", "message",
             "location", "source", "source_display", "status", "status_display", "customer",
-            "customer_name", "assigned_to", "assigned_to_name", "internal_notes", "created_at",
+            "customer_name", "assigned_to", "assigned_to_name", "internal_notes", "privacy_consent_at", "created_at",
             "updated_at",
         ]
         read_only_fields = ["created_at", "updated_at"]

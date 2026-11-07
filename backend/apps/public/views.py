@@ -1,5 +1,6 @@
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.utils import translation
 from django.utils.translation import gettext as _
 from rest_framework import generics, status
@@ -122,8 +123,13 @@ class EnquiryCreateView(PublicMixin, generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         honeypot = serializer.validated_data.pop("website", "")
+        serializer.validated_data.pop("privacy_consent", None)
         if not honeypot:
-            serializer.save(source=Source.WEBSITE, ip_address=BaseThrottle().get_ident(request))
+            serializer.save(
+                source=Source.WEBSITE,
+                ip_address=BaseThrottle().get_ident(request),
+                privacy_consent_at=timezone.now(),
+            )
         # Bots get the same success response so they don't retry.
         return Response({"detail": _("Thank you! We will contact you shortly.")}, status=status.HTTP_201_CREATED)
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { ConsentMap } from "@/components/consent-map";
 import { ContactSection } from "@/components/sections";
 import { Container } from "@/components/ui";
 import { isLocale, languageAlternates } from "@/i18n/config";
@@ -37,12 +38,11 @@ export default async function ContactPage({ params, searchParams }: Props) {
       />
       {site.map_embed_url && (
         <Container className="py-14">
-          <iframe
+          <ConsentMap
             src={site.map_embed_url}
             title={fmt(t.mapTitle, { company: site.company_name })}
-            className="reveal h-96 w-full rounded-[2rem] border border-stone-200 shadow-[0_30px_70px_-40px_rgb(28_25_23/0.5)]"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+            blockedText={t.mapBlocked}
+            loadLabel={t.mapLoad}
           />
         </Container>
       )}

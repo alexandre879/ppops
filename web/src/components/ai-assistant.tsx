@@ -7,6 +7,7 @@ import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent,
 
 import { localePath, type Locale } from "@/i18n/config";
 import { fmt, type Dictionary } from "@/i18n";
+import { getConsent } from "@/lib/consent";
 import { telHref } from "@/lib/format";
 
 type Source = { title: string; url: string };
@@ -39,6 +40,8 @@ function loadMessages(): Message[] {
 }
 
 function saveMessages(messages: Message[]) {
+  // Remembering the chat is optional storage: only with the visitor's consent.
+  if (getConsent() !== "all") return;
   try {
     window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-40)));
   } catch {

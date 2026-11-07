@@ -52,7 +52,7 @@ class LanguageTests(APITestCase):
     def test_validation_messages_are_translated(self):
         ka = self.client.post("/api/public/enquiries/", {"name": "", "phone": "1"}, format="json")
         self.assertEqual(ka.data["name"][0], "ეს ველი არ შეიძლება იყოს ცარიელი.")
-        ru = self.client.post("/api/public/enquiries/", {"name": "Иван"}, format="json", HTTP_ACCEPT_LANGUAGE="ru")
+        ru = self.client.post("/api/public/enquiries/", {"name": "Иван", "privacy_consent": True}, format="json", HTTP_ACCEPT_LANGUAGE="ru")
         self.assertIn("телефон", ru.data["phone"][0])
 
     def test_admin_api_reads_and_writes_every_language(self):

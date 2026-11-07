@@ -77,6 +77,10 @@ class SiteSettings(SingletonModel):
     phone_quinary = models.CharField(max_length=40, blank=True, default="")
     email = models.EmailField(blank=True, default="")
     address = models.CharField(max_length=255, blank=True, default="")
+    # Legal identity shown in the website footer and legal pages (registered company name
+    # and Georgian identification code), as consumer and data-protection law expects.
+    legal_name = models.CharField(max_length=200, blank=True, default="")
+    registration_code = models.CharField(max_length=40, blank=True, default="")
     working_hours = models.CharField(max_length=120, blank=True, default="")
     facebook_url = models.URLField(blank=True, default="")
     instagram_url = models.URLField(blank=True, default="")

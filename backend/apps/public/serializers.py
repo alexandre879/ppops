@@ -19,7 +19,7 @@ class PublicSiteSerializer(BaseModelSerializer):
         model = SiteSettings
         fields = [
             "company_name", "tagline", "hero_title", "hero_subtitle", "hero_image", "about_text",
-            "mission", "promise", "phones", "email", "address", "working_hours", "facebook_url",
+            "mission", "promise", "phones", "email", "address", "legal_name", "registration_code", "working_hours", "facebook_url",
             "instagram_url", "map_embed_url", "years_experience", "projects_completed", "specialists",
         ]
 
@@ -141,14 +141,21 @@ class EnquiryCreateSerializer(serializers.ModelSerializer):
     )
     # Honeypot: hidden on the website, so only bots fill it in.
     website = serializers.CharField(required=False, allow_blank=True, write_only=True, max_length=200)
+    # The visitor must confirm they are an adult and accept the privacy policy.
+    privacy_consent = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = Enquiry
-        fields = ["name", "email", "phone", "company", "service", "subject", "message", "location", "website"]
+        fields = ["name", "email", "phone", "company", "service", "subject", "message", "location", "website", "privacy_consent"]
         extra_kwargs = {
             "name": {"max_length": 160},
             "message": {"max_length": 5000},
         }
+
+    def validate_privacy_consent(self, value):
+        if value is not True:
+            raise serializers.ValidationError(_("Please confirm you are 18 or older and accept the privacy policy."))
+        return value
 
     def validate(self, attrs):
         if not (attrs.get("phone") or attrs.get("email")):

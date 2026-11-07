@@ -2,6 +2,7 @@ from django.core.cache import cache
 from rest_framework.test import APITestCase
 
 from apps.catalog.models import Service, ServiceCategory, Solution
+from apps.core.models import SiteSettings
 from apps.crm.models import Enquiry, Source
 from apps.projects.models import Project, ProjectPhoto
 
@@ -59,22 +60,43 @@ class PublicApiTests(APITestCase):
     def test_enquiry_is_stored_as_website_lead(self):
         response = self.client.post(
             "/api/public/enquiries/",
-            {"name": "Nino", "phone": "+995 555 11 22 33", "service": self.service.slug, "message": "Price please"},
+            {"name": "Nino", "phone": "+995 555 11 22 33", "service": self.service.slug, "message": "Price please",
+             "privacy_consent": True},
             format="json",
         )
         self.assertEqual(response.status_code, 201)
         enquiry = Enquiry.objects.get()
         self.assertEqual(enquiry.source, Source.WEBSITE)
         self.assertEqual(enquiry.service, self.service)
+        self.assertIsNotNone(enquiry.privacy_consent_at)
+
+    def test_enquiry_requires_privacy_consent(self):
+        for consent in (None, False):
+            data = {"name": "Nino", "phone": "+995 555 11 22 33"}
+            if consent is not None:
+                data["privacy_consent"] = consent
+            response = self.client.post("/api/public/enquiries/", data, format="json")
+            self.assertEqual(response.status_code, 400)
+            self.assertIn("privacy_consent", response.data)
+        self.assertFalse(Enquiry.objects.exists())
+
+    def test_public_site_exposes_legal_identity(self):
+        site = SiteSettings.load()
+        site.legal_name = "New House Modern LLC"
+        site.registration_code = "400000000"
+        site.save()
+        data = self.client.get("/api/public/site/").data
+        self.assertEqual(data["legal_name"], "New House Modern LLC")
+        self.assertEqual(data["registration_code"], "400000000")
 
     def test_enquiry_requires_contact_details(self):
-        response = self.client.post("/api/public/enquiries/", {"name": "Nino", "message": "Hi"}, format="json")
+        response = self.client.post("/api/public/enquiries/", {"name": "Nino", "message": "Hi", "privacy_consent": True}, format="json")
         self.assertEqual(response.status_code, 400)
 
     def test_honeypot_submissions_are_silently_dropped(self):
         response = self.client.post(
             "/api/public/enquiries/",
-            {"name": "Bot", "phone": "1", "website": "http://spam.example"},
+            {"name": "Bot", "phone": "1", "website": "http://spam.example", "privacy_consent": True},
             format="json",
         )
         self.assertEqual(response.status_code, 201)

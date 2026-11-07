@@ -83,6 +83,8 @@ class Enquiry(TimeStampedModel):
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="enquiries"
     )
     ip_address = models.GenericIPAddressField(null=True, blank=True, editable=False)
+    # When the visitor accepted the privacy policy on the website form (proof of consent).
+    privacy_consent_at = models.DateTimeField(null=True, blank=True, editable=False)
     internal_notes = models.TextField(blank=True)
 
     class Meta:

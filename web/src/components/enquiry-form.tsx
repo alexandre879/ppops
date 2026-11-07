@@ -2,9 +2,10 @@
 
 import clsx from "clsx";
 import { CircleCheck, LoaderCircle, Send } from "lucide-react";
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 
-import type { Locale } from "@/i18n/config";
+import { localePath, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n";
 
 import { buttonClass } from "./ui";
@@ -37,6 +38,7 @@ export function EnquiryForm({
     const form = event.currentTarget;
     const body = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     if (!body.service) delete body.service;
+    const payload = { ...body, privacy_consent: body.privacy_consent === "on" };
 
     setStatus("sending");
     setErrors({});
@@ -44,7 +46,7 @@ export function EnquiryForm({
       const response = await fetch("/api/public/enquiries/", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json", "Accept-Language": lang },
-        body: JSON.stringify(body),
+        body: JSON.stringify(payload),
       });
       const data = await response.json().catch(() => ({}));
       if (response.ok) {
@@ -147,6 +149,26 @@ export function EnquiryForm({
         </label>
         <textarea id="enq-message" name="message" rows={5} maxLength={5000} placeholder={t.messagePlaceholder} className={fieldClass} />
         {error("message")}
+      </div>
+      <div className="sm:col-span-2">
+        <label className={clsx("flex items-start gap-3 text-sm", dark ? "text-stone-300" : "text-stone-700")}>
+          <input
+            type="checkbox"
+            name="privacy_consent"
+            required
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 accent-brand-500"
+            aria-invalid={!!errors.privacy_consent}
+            aria-describedby={errors.privacy_consent ? "privacy_consent-error" : undefined}
+          />
+          <span>
+            {t.consentBefore}
+            <Link href={localePath(lang, "/privacy")} target="_blank" className="font-semibold text-brand-600 underline underline-offset-2">
+              {t.consentLink}
+            </Link>
+            {t.consentAfter}
+          </span>
+        </label>
+        {error("privacy_consent")}
       </div>
       {/* Honeypot — hidden from people, irresistible to bots */}
       <div className="hidden" aria-hidden>

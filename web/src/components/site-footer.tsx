@@ -2,11 +2,13 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 
 import { localePath, type Locale } from "@/i18n/config";
-import type { Dictionary } from "@/i18n";
+import { fmt, type Dictionary } from "@/i18n";
+import { LEGAL_SLUGS } from "@/i18n/legal";
 import { NAV } from "@/lib/content";
 import { telHref } from "@/lib/format";
 import type { Category, Site } from "@/lib/types";
 
+import { CookieSettingsButton } from "./cookie-banner";
 import { Logo } from "./icons";
 
 export function SiteFooter({ lang, dict, site, categories }: { lang: Locale; dict: Dictionary; site: Site; categories: Category[] }) {
@@ -96,9 +98,22 @@ export function SiteFooter({ lang, dict, site, categories }: { lang: Locale; dic
         </div>
       </div>
       <div className="border-t border-white/10">
+        <nav aria-label={dict.footer.legal} className="container-page flex flex-wrap gap-x-6 gap-y-2 pt-6 text-sm">
+          {LEGAL_SLUGS.map((slug) => (
+            <Link key={slug} href={localePath(lang, `/${slug}`)} className="hover:text-white">
+              {dict.footer[slug]}
+            </Link>
+          ))}
+          <CookieSettingsButton label={dict.footer.cookieSettings} />
+        </nav>
         <div className="container-page flex flex-col gap-2 py-6 text-xs text-stone-500 sm:flex-row sm:justify-between">
           <p>
-            © {year} {site.company_name}. {dict.footer.rights}
+            © {year} {site.legal_name || site.company_name}. {dict.footer.rights}
+            {site.registration_code && (
+              <span className="block sm:inline sm:before:mx-2 sm:before:content-['·']">
+                {fmt(dict.footer.legalEntity, { name: site.legal_name || site.company_name, code: site.registration_code })}
+              </span>
+            )}
           </p>
           <p>{dict.footer.tagline}</p>
         </div>

@@ -212,3 +212,6 @@ msgstr "Контакты"
 #: apps/public/knowledge.py
 msgid "Services"
 msgstr "Услуги"
+
+msgid "Please confirm you are 18 or older and accept the privacy policy."
+msgstr "Подтвердите, что вам исполнилось 18 лет и вы принимаете политику конфиденциальности."

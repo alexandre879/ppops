@@ -5,6 +5,7 @@ export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "ka";
 export const LOCALE_COOKIE = "NEXT_LOCALE";
 export const LOCALE_HEADER = "x-nhm-locale";
+export const NONCE_HEADER = "x-nonce";
 
 export const localeNames: Record<Locale, string> = { ka: "ქართული", en: "English", ru: "Русский" };
 export const localeShort: Record<Locale, string> = { ka: "ქარ", en: "EN", ru: "RU" };

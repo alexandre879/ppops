@@ -10,6 +10,8 @@ export type Site = {
   phones: string[];
   email: string;
   address: string;
+  legal_name: string;
+  registration_code: string;
   working_hours: string;
   facebook_url: string;
   instagram_url: string;

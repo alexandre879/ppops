@@ -1,13 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Manrope, Noto_Sans_Georgian } from "next/font/google";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { AiAssistant } from "@/components/ai-assistant";
+import { CookieBanner } from "@/components/cookie-banner";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { isLocale, languageAlternates, ogLocale } from "@/i18n/config";
+import { isLocale, languageAlternates, NONCE_HEADER, ogLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { getCategories, getSite } from "@/lib/api";
 
@@ -45,11 +47,12 @@ export default async function LocaleLayout({ children, params }: Props) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const [site, categories] = await Promise.all([getSite(lang), getCategories(lang)]);
+  const [site, categories, requestHeaders] = await Promise.all([getSite(lang), getCategories(lang), headers()]);
+  const nonce = requestHeaders.get(NONCE_HEADER) ?? undefined;
   return (
     <html lang={lang} className={`${inter.variable} ${manrope.variable} ${georgian.variable}`} suppressHydrationWarning>
       <body>
-        <script dangerouslySetInnerHTML={{ __html: REVEAL_BOOT }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: REVEAL_BOOT }} />
         <a
           href="#main"
           className="sr-only z-[60] rounded-md bg-brand-500 px-4 py-2 font-semibold text-stone-950 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
@@ -60,6 +63,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <main id="main">{children}</main>
         <SiteFooter lang={lang} dict={dict} site={site} categories={categories} />
         <ScrollReveal />
+        <CookieBanner lang={lang} t={dict.consent} />
         <AiAssistant lang={lang} t={dict.assistant} phones={site.phones} company={site.company_name} />
       </body>
     </html>

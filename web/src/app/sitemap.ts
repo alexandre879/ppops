@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { defaultLocale, locales } from "@/i18n/config";
+import { LEGAL_SLUGS } from "@/i18n/legal";
 import { getCategories, getProjects } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/manufacturing",
     "/about",
     "/contact",
+    ...LEGAL_SLUGS.map((slug) => `/${slug}`),
     ...categories.flatMap((c) => c.services.map((s) => `/services/${s.slug}`)),
     ...projects.map((p) => `/projects/${p.slug}`),
   ];
