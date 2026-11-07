@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Building2, Clock, Factory, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Building2, Clock, Factory, Phone, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
