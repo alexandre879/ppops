@@ -55,7 +55,7 @@ function LoginForm() {
   }, [status, router, next]);
 
   useEffect(() => {
-    document.title = `${t("Sign in")} · New House Modern`;
+    document.title = `${t("Sign in")} · New House World`;
   }, []);
 
   async function onSubmit(event: FormEvent) {
@@ -139,7 +139,7 @@ export default function LoginPage() {
         <div className="flex items-center gap-3">
           <BrandMark className="h-11 w-11" />
           <span className="leading-tight">
-            <span className="block text-base font-bold">New House Modern</span>
+            <span className="block text-base font-bold">New House World</span>
             <span className="block text-xs font-medium text-stone-400">{t("Management platform")}</span>
           </span>
         </div>
@@ -147,7 +147,7 @@ export default function LoginPage() {
           <p className="max-w-lg text-3xl leading-tight font-bold tracking-tight xl:text-4xl">
             {t("Projects, customers, quotations and production —")} <span className="text-brand-400">{t("in one place.")}</span>
           </p>
-          <p className="mt-4 max-w-md text-stone-400">{t("The internal management platform for the New House Modern team.")}</p>
+          <p className="mt-4 max-w-md text-stone-400">{t("The internal management platform for the New House World team.")}</p>
           <ul className="mt-10 grid max-w-md grid-cols-2 gap-3">
             {MODULES.map(({ label, icon: Icon }) => (
               <li key={label} className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3.5 ring-1 ring-white/10">
@@ -169,7 +169,7 @@ export default function LoginPage() {
           {/* The dark brand panel is desktop-only; keep the logo on small screens. */}
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <BrandMark className="h-10 w-10" />
-            <span className="text-base font-bold text-stone-950">New House Modern</span>
+            <span className="text-base font-bold text-stone-950">New House World</span>
           </div>
           <div className="rounded-3xl border border-stone-200/80 bg-white p-7 shadow-[0_20px_50px_-24px_rgb(28_25_23/0.25)] sm:p-9">
             <h1 className="text-2xl font-bold tracking-tight text-stone-950">{t("Sign in")}</h1>

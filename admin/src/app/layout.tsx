@@ -9,7 +9,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "New House Modern",
+  title: "New House World",
   robots: { index: false, follow: false },
 };
 

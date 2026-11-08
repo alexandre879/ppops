@@ -1,6 +1,6 @@
-# New House Modern — website & business platform
+# New House World — website & business platform
 
-Corporate website and internal management platform for **New House Modern**
+Corporate website and internal management platform for **New House World**
 (façade plastering, cladding, decorative finishes, renovation, custom furniture,
 in-house scaffolding & formwork manufacturing).
 

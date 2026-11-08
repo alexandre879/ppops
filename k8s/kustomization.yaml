@@ -1,4 +1,4 @@
-# ppops (New House Modern) on the DigitalOcean k3s server it shares with educational_system.
+# ppops (New House World) on the DigitalOcean k3s server it shares with educational_system.
 #   Website  https://newhousemodern.shop (also https://ppops.blueapp.store)
 #   Admin    https://newhousemodern.shop/admin
 # deploy.sh builds the images on the server and applies this with: kubectl apply -k k8s

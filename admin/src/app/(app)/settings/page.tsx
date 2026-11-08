@@ -27,7 +27,7 @@ const siteFields: FieldDef[] = [
   { name: "phone_quinary", label: t("Fifth phone"), type: "tel" },
   { name: "email", label: t("Email"), type: "email" },
   { name: "address", label: t("Address"), type: "translated" },
-  { name: "legal_name", label: t("Registered legal name"), help: t("Shown in the website footer and legal pages, e.g. “New House Modern LLC”.") },
+  { name: "legal_name", label: t("Registered legal name"), help: t("Shown in the website footer and legal pages, e.g. “New House World LLC”.") },
   { name: "registration_code", label: t("Identification code"), help: t("Company registration (identification) code.") },
   { name: "working_hours", label: t("Working hours"), type: "translated", placeholder: t("e.g. Mon–Sat, 09:00–19:00") },
   { name: "facebook_url", label: t("Facebook URL"), type: "url" },

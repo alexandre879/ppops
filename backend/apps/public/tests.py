@@ -47,7 +47,7 @@ class PublicApiTests(APITestCase):
 
     def test_site_settings_are_public(self):
         data = self.client.get("/api/public/site/").data
-        self.assertEqual(data["company_name"], "New House Modern")
+        self.assertEqual(data["company_name"], "New House World")
         self.assertEqual(data["phones"], ["+995 557 60 30 04", "+995 568 28 27 72"])
 
     def test_only_published_services_are_listed(self):
@@ -113,11 +113,11 @@ class PublicApiTests(APITestCase):
 
     def test_public_site_exposes_legal_identity(self):
         site = SiteSettings.load()
-        site.legal_name = "New House Modern LLC"
+        site.legal_name = "New House World LLC"
         site.registration_code = "400000000"
         site.save()
         data = self.client.get("/api/public/site/").data
-        self.assertEqual(data["legal_name"], "New House Modern LLC")
+        self.assertEqual(data["legal_name"], "New House World LLC")
         self.assertEqual(data["registration_code"], "400000000")
 
     def test_enquiry_requires_contact_details(self):

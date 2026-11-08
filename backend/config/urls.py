@@ -30,5 +30,5 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-admin.site.site_header = "New House Modern — system administration"
-admin.site.site_title = "New House Modern"
+admin.site.site_header = "New House World — system administration"
+admin.site.site_title = "New House World"

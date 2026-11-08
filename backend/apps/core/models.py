@@ -31,7 +31,7 @@ class SingletonModel(models.Model):
 class SiteSettings(SingletonModel):
     """Company details and editable homepage copy for the public website."""
 
-    company_name = models.CharField(max_length=120, default="New House Modern")
+    company_name = models.CharField(max_length=120, default="New House World")
     tagline = models.CharField(
         max_length=200,
         default="Façades, cladding, decorative finishes and in-house manufacturing",
@@ -50,7 +50,7 @@ class SiteSettings(SingletonModel):
     hero_image = models.ImageField(upload_to="site/", blank=True, null=True)
     about_text = models.TextField(
         default=(
-            "New House Modern is a construction and renovation company specialising in façade "
+            "New House World is a construction and renovation company specialising in façade "
             "plastering, modern exterior and interior cladding, energy-efficient insulation systems, "
             "painting, furniture manufacturing and metal construction systems. We deliver professional "
             "construction and renovation services using modern technologies, high-quality materials "

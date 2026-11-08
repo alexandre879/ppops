@@ -1,4 +1,4 @@
-"""Load New House Modern's company content, and optionally demo business data.
+"""Load New House World's company content, and optionally demo business data.
 
     python manage.py seed            # company profile, services, materials, products, admin user
     python manage.py seed --demo     # + sample customers, projects, quotes, stock (local/demo only!)
@@ -40,7 +40,7 @@ def tr(field: str, en, ka, ru) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Company content (from the New House Modern company profile)
+# Company content (from the New House World company profile)
 # ---------------------------------------------------------------------------
 
 SITE_TEXT = {
@@ -66,18 +66,18 @@ SITE_TEXT = {
         "честным ценам и в согласованные сроки.",
     ),
     "about_text": (
-        "New House Modern is a construction and renovation company specialising in façade plastering, modern "
+        "New House World is a construction and renovation company specialising in façade plastering, modern "
         "exterior and interior cladding, energy-efficient insulation systems, painting, furniture manufacturing "
         "and metal construction systems. We deliver professional construction and renovation services using "
         "modern technologies, high-quality materials and qualified teams, and undertake projects of varying "
         "complexity — including buildings of different heights and architectural designs.",
-        "New House Modern არის სამშენებლო და სარემონტო კომპანია, რომელიც სპეციალიზირებულია ფასადების "
+        "New House World არის სამშენებლო და სარემონტო კომპანია, რომელიც სპეციალიზირებულია ფასადების "
         "შელესვაზე, თანამედროვე გარე და შიდა მოპირკეთებაზე, ენერგოეფექტურ თბოიზოლაციის სისტემებზე, "
         "შეღებვაზე, ავეჯის წარმოებასა და ლითონის სამშენებლო სისტემებზე. ჩვენ ვასრულებთ პროფესიონალურ "
         "სამშენებლო და სარემონტო სამუშაოებს თანამედროვე ტექნოლოგიებით, მაღალი ხარისხის მასალებითა და "
         "კვალიფიციური ბრიგადებით და ვახორციელებთ სხვადასხვა სირთულის პროექტებს — მათ შორის სხვადასხვა "
         "სიმაღლისა და არქიტექტურის შენობებზე.",
-        "New House Modern — строительно-ремонтная компания, специализирующаяся на штукатурке фасадов, "
+        "New House World — строительно-ремонтная компания, специализирующаяся на штукатурке фасадов, "
         "современной наружной и внутренней облицовке, энергоэффективных системах утепления, покраске, "
         "производстве мебели и металлических строительных системах. Мы выполняем профессиональные строительные "
         "и ремонтные работы с использованием современных технологий, качественных материалов и "
