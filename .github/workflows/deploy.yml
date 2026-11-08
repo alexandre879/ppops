@@ -9,7 +9,6 @@ on:
       - "backend/**"
       - "web/**"
       - "admin/**"
-      - "k8s/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -72,6 +71,8 @@ jobs:
           printf '%s\n' "$SERVER_HOST_KEY" >> ~/.ssh/known_hosts
 
       - name: Deploy
+        env:
+          SERVER: ppops-deployer@209.38.108.180
         run: SSH_KEY="$HOME/.ssh/deploy_key" ./k8s/deploy.sh
 
       - name: Check the live site

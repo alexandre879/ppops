@@ -191,8 +191,7 @@ content edited in the admin is used from the next question on.
 namespace. **The Droplet also hosts another app (`blueapp.store`), so take care with its
 resources.** The manifests are in `k8s/`; the website is at `/` and the admin at `/admin`.
 
-**Every push to `main` that changes `backend/`, `web/`, `admin/` or `k8s/` goes live
-automatically.** [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the backend
+**Every push to `main` that changes `backend/`, `web/` or `admin/` goes live automatically.** [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the backend
 tests, then `k8s/deploy.sh`, which:
 
 1. uploads the source to the server and builds the images there;
@@ -203,8 +202,14 @@ If the tests or the build fail, the live site is left as it was. You can follow 
 one by hand, from the **Actions** tab on GitHub. Running `./k8s/deploy.sh` from your own machine
 does the same, but it uploads your local files, including anything uncommitted.
 
-Setup, once: the `DEPLOY_SSH_KEY` repository secret holds a private key whose public half is in
-`/root/.ssh/authorized_keys` on the server. That key gives root on the Droplet, so never share it.
+Setup, once: the `DEPLOY_SSH_KEY` repository secret holds a private key for the `ppops-deployer`
+account on the server. That key can only start a deploy of this project
+(`/usr/local/sbin/ppops-deploy`, from `k8s/server-deploy.sh`); it has no shell or other access.
+
+Changes to `k8s/` are not deployed automatically, because a manifest could give a pod access to the
+whole server. Apply them by hand with `./k8s/full-deploy.sh`, which needs root access. If
+`k8s/server-deploy.sh` changes, install it on the server by hand too.
+
 Secrets the app needs (`ppops-postgres`, `ppops-secrets`) are created once by `deploy.sh` and live
 only on the server; none belong in `k8s/`.
 
