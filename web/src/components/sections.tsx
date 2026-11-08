@@ -74,7 +74,7 @@ export function CtaBand({ site, dict, lang }: { site: Site; dict: Dictionary; la
             <h2 className="text-3xl font-extrabold text-stone-950 sm:text-4xl">{dict.cta.title}</h2>
             {site.promise && <p className="mt-3 text-lg text-stone-900/80">{site.promise}</p>}
           </div>
-          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
             <ButtonLink href={localePath(lang, "/contact")} variant="dark" className="whitespace-nowrap">
               {dict.common.getFreeEstimate} <ArrowRight className="h-4 w-4" aria-hidden />
             </ButtonLink>

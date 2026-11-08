@@ -17,7 +17,8 @@ export const viewport: Viewport = { themeColor: "#1c1917" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    // lang is set on the client from the saved/browser language (lib/i18n.ts) before hydration.
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>
