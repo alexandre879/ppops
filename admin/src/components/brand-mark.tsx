@@ -10,7 +10,7 @@ export function BrandMark({ className }: { className?: string }) {
         className,
       )}
     >
-      <Image src="/logo-mark.png" alt="" width={203} height={166} loading="eager" className="h-auto w-[78%]" />
+      <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/logo-mark.png`} alt="" width={203} height={166} loading="eager" className="h-auto w-[78%]" />
     </span>
   );
 }

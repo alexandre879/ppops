@@ -85,10 +85,23 @@ export const getServices = (locale: Locale, params: { category?: string; feature
 
 export const getProjects = cache((locale: Locale) => withFallback<ProjectSummary[]>("/projects/", locale, []));
 
+/**
+ * For pages that exist only if the API has them. A missing item is null; any other failure is
+ * thrown, because answering 404 for a temporary outage would tell search engines the page is gone.
+ */
+async function orNull<T>(path: string, locale: Locale): Promise<T | null> {
+  try {
+    return await request<T>(path, locale);
+  } catch (error) {
+    if (error instanceof NotFound) return null;
+    throw error;
+  }
+}
+
 export const getService = cache((locale: Locale, slug: string) =>
-  withFallback<ServiceDetail | null>(`/services/${encodeURIComponent(slug)}/`, locale, null),
+  orNull<ServiceDetail>(`/services/${encodeURIComponent(slug)}/`, locale),
 );
 
 export const getProject = cache((locale: Locale, slug: string) =>
-  withFallback<ProjectDetail | null>(`/projects/${encodeURIComponent(slug)}/`, locale, null),
+  orNull<ProjectDetail>(`/projects/${encodeURIComponent(slug)}/`, locale),
 );

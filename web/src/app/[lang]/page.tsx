@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Building2, Clock, Factory, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Building2, Clock, Factory, Phone, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -72,15 +72,18 @@ export default async function HomePage({ params }: Props) {
                 </ButtonLink>
               </div>
               {site.phones.length > 0 && (
-                <div className="mt-6 flex items-start gap-1.5 text-sm text-stone-400">
-                  <span>{dict.common.orCallUs}</span>
-                  <span className="flex flex-col gap-0.5">
-                    {site.phones.slice(0, 2).map((phone) => (
-                      <a key={phone} href={telHref(phone)} className="font-semibold text-white transition-colors hover:text-brand-400">
-                        {phone}
-                      </a>
+                <div className="mt-6 text-sm text-stone-400">
+                  <p>{dict.common.orCallUs}</p>
+                  <ul className="mt-2 grid gap-x-8 gap-y-1.5 sm:w-fit sm:grid-cols-2">
+                    {site.phones.map((phone) => (
+                      <li key={phone}>
+                        <a href={telHref(phone)} className="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-white transition-colors hover:text-brand-400">
+                          <Phone className="h-3.5 w-3.5 text-brand-500" aria-hidden />
+                          {phone}
+                        </a>
+                      </li>
                     ))}
-                  </span>
+                  </ul>
                 </div>
               )}
               {stats.length > 0 && (

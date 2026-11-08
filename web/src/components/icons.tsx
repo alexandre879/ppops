@@ -23,7 +23,7 @@ export function Logo({ light = false }: { light?: boolean }) {
     <span className="flex items-center gap-2.5">
       {/* The emblem's teal and gold need a light ground to read on the dark header and footer. */}
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-[inset_0_0_0_1px_rgb(0_0_0/0.06)]">
-        <Image src="/logo-mark.png" alt="" width={203} height={166} loading="eager" className="h-auto w-8" />
+        <Image src="/logo-mark.png" alt="" width={203} height={166} sizes="32px" loading="eager" className="h-auto w-8" />
       </span>
       <span className="leading-none whitespace-nowrap">
         <span className={`block font-display text-[15px] font-extrabold tracking-tight ${light ? "text-white" : "text-stone-950"}`}>

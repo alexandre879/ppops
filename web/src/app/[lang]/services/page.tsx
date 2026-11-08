@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
   const t = getDictionary(lang).servicesPage;
-  return { title: t.eyebrow, description: t.description, alternates: languageAlternates("/services") };
+  return { title: t.eyebrow, description: t.description, alternates: languageAlternates(lang, "/services") };
 }
 
 export default async function ServicesPage({ params }: Props) {

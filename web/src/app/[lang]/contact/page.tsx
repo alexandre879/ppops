@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
   const t = getDictionary(lang).contactPage;
-  return { title: t.eyebrow, description: t.description, alternates: languageAlternates("/contact") };
+  return { title: t.eyebrow, description: t.description, alternates: languageAlternates(lang, "/contact") };
 }
 
 export default async function ContactPage({ params, searchParams }: Props) {

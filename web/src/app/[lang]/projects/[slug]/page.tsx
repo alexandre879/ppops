@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(lang)) return {};
   const project = await getProject(lang, slug);
   if (!project) return { title: getDictionary(lang).projectDetail.notFound };
-  return { title: project.title, description: project.public_summary, alternates: languageAlternates(`/projects/${slug}`) };
+  return { title: project.title, description: project.public_summary, alternates: languageAlternates(lang, `/projects/${slug}`) };
 }
 
 export default async function ProjectPage({ params }: Props) {

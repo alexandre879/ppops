@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: { default: [site.company_name, site.tagline].filter(Boolean).join(" — "), template: `%s | ${site.company_name}` },
     description: site.hero_subtitle,
     openGraph: { siteName: site.company_name, type: "website", locale: ogLocale[lang] },
-    alternates: languageAlternates(),
+    alternates: languageAlternates(lang),
   };
 }
 

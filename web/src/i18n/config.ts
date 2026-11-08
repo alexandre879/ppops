@@ -22,8 +22,9 @@ export function localePath(locale: Locale, path = "") {
 }
 
 /** hreflang alternates for page metadata. */
-export function languageAlternates(path = "") {
+export function languageAlternates(lang: Locale, path = "") {
   return {
+    canonical: localePath(lang, path),
     languages: {
       ...Object.fromEntries(locales.map((locale) => [locale, localePath(locale, path)])),
       "x-default": localePath(defaultLocale, path),
