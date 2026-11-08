@@ -1,4 +1,4 @@
-"""Django settings for the New House Modern platform.
+"""Django settings for the New House World platform.
 
 Every deployment-specific value is read from the environment (or ``backend/.env``
 for local development). See ``.env.example`` in the repository root.
@@ -188,8 +188,8 @@ AUTH_REFRESH_COOKIE = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "New House Modern API",
-    "DESCRIPTION": "REST API for the New House Modern website and business management platform.",
+    "TITLE": "New House World API",
+    "DESCRIPTION": "REST API for the New House World website and business management platform.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,

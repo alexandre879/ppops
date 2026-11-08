@@ -98,7 +98,7 @@ function Brand() {
     <Link href="/" className="flex items-center gap-2.5 px-2">
       <BrandMark />
       <span className="leading-tight">
-        <span className="block text-sm font-bold text-white">New House Modern</span>
+        <span className="block text-sm font-bold text-white">New House World</span>
         <span className="block text-[11px] font-medium text-stone-400">{t("Management platform")}</span>
       </span>
     </Link>
@@ -200,7 +200,7 @@ function useDocumentTitle() {
     const href = activeHref(pathname);
     const item = NAV.flatMap((group) => group.items).find((entry) => entry.href === href);
     const page = pathname === "/account" ? t("My account") : item?.label;
-    document.title = page ? `${page} · New House Modern` : "New House Modern";
+    document.title = page ? `${page} · New House World` : "New House World";
   }, [pathname]);
 }
 
