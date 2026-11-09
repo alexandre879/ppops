@@ -17,11 +17,11 @@ import { t } from "@/lib/i18n";
 /* ---------- Buttons ---------- */
 
 const buttonVariants = {
-  primary: "bg-stone-900 text-white shadow-sm hover:bg-stone-700 active:bg-stone-950",
-  secondary: "border border-stone-200 bg-white text-stone-800 shadow-xs hover:bg-stone-50 hover:border-stone-300 active:bg-stone-100",
-  ghost: "text-stone-600 hover:bg-stone-100 hover:text-stone-950",
-  danger: "border border-red-200 bg-white text-red-700 shadow-xs hover:bg-red-50 hover:border-red-300",
-  dark: "bg-stone-900 text-white shadow-sm hover:bg-stone-700 active:bg-stone-950",
+  primary: "bg-brand-500 text-stone-950 hover:bg-brand-400 shadow-sm",
+  secondary: "border border-stone-300 bg-white text-stone-800 hover:bg-stone-50 hover:border-stone-400",
+  ghost: "text-stone-600 hover:bg-stone-100 hover:text-stone-900",
+  danger: "border border-red-200 bg-white text-red-700 hover:bg-red-50",
+  dark: "bg-stone-900 text-white hover:bg-stone-800",
 } as const;
 
 type ButtonProps = ComponentProps<"button"> & {
@@ -33,7 +33,7 @@ type ButtonProps = ComponentProps<"button"> & {
 
 export function buttonClass(variant: keyof typeof buttonVariants = "primary", size: "sm" | "md" = "md", className?: string) {
   return clsx(
-    "inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+    "inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md font-semibold whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-50",
     size === "sm" ? "h-8 px-2.5 text-xs" : "h-9 px-3.5 text-sm",
     buttonVariants[variant],
     className,
@@ -61,7 +61,7 @@ export function LinkButton({
 /* ---------- Form controls ---------- */
 
 export const controlClass =
-  "block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-950 shadow-xs transition-[border-color,box-shadow] placeholder:text-stone-400 hover:border-stone-400 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/15 focus:outline-none disabled:bg-stone-50 disabled:text-stone-500 disabled:shadow-none disabled:hover:border-stone-300 aria-invalid:border-red-400";
+  "block w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none disabled:bg-stone-50 disabled:text-stone-500 aria-invalid:border-red-400";
 
 export function Input({ className, ...props }: ComponentProps<"input">) {
   return <input className={clsx(controlClass, className)} {...props} />;
@@ -129,7 +129,7 @@ export function PageHeader({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           {meta && <div className="mb-1.5 flex flex-wrap items-center gap-2">{meta}</div>}
-          <h1 className="text-2xl font-semibold tracking-tight text-stone-950">{title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-stone-950">{title}</h1>
           {description && <p className="mt-1 text-sm text-stone-500">{description}</p>}
         </div>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -152,10 +152,10 @@ export function Card({
   padded?: boolean;
 }) {
   return (
-    <section className={clsx("overflow-hidden rounded-xl border border-stone-200 bg-white shadow-xs", className)}>
+    <section className={clsx("rounded-xl border border-stone-200 bg-white shadow-xs", className)}>
       {(title || actions) && (
-        <header className="flex min-h-12 items-center justify-between gap-3 border-b border-stone-200/70 px-5 py-2.5">
-          {title && <h2 className="text-sm font-semibold tracking-tight text-stone-950">{title}</h2>}
+        <header className="flex items-center justify-between gap-3 border-b border-stone-100 px-5 py-3.5">
+          {title && <h2 className="text-sm font-semibold text-stone-900">{title}</h2>}
           {actions && <div className="flex items-center gap-2">{actions}</div>}
         </header>
       )}
@@ -180,22 +180,13 @@ export function StatCard({
   href?: string;
 }) {
   const body = (
-    <div className={clsx("h-full rounded-xl border border-stone-200 bg-white p-4 shadow-xs transition", href && "hover:border-stone-300 hover:shadow-sm")}>
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-[13px] leading-snug font-medium text-stone-500">{label}</p>
-        {icon && (
-          <span className={clsx("flex h-7 w-7 shrink-0 items-center justify-center rounded-lg", tone === "warning" ? "bg-amber-50 text-amber-600" : "bg-stone-100 text-stone-500")}>
-            {icon}
-          </span>
-        )}
+    <div className={clsx("h-full rounded-xl border bg-white p-4 shadow-xs transition", href && "hover:border-brand-300", tone === "warning" ? "border-amber-200" : "border-stone-200")}>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs font-medium tracking-wide text-stone-500 uppercase">{label}</p>
+        {icon && <span className="text-stone-400">{icon}</span>}
       </div>
-      <p className="mt-3 text-2xl leading-none font-semibold tracking-tight text-stone-950 tabular-nums">{value}</p>
-      {hint && (
-        <p className={clsx("mt-2 flex items-center gap-1.5 text-xs", tone === "warning" ? "font-medium text-amber-700" : "text-stone-500")}>
-          {tone === "warning" && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />}
-          {hint}
-        </p>
-      )}
+      <p className="mt-2 text-xl leading-snug font-bold tracking-tight text-stone-950 tabular-nums">{value}</p>
+      {hint && <p className={clsx("mt-1 text-xs", tone === "warning" ? "text-amber-700" : "text-stone-500")}>{hint}</p>}
     </div>
   );
   return href ? <Link href={href} className="block">{body}</Link> : body;
@@ -241,7 +232,7 @@ export function PageLoader() {
 export function EmptyState({ title, description, action, icon }: { title: string; description?: string; action?: ReactNode; icon?: ReactNode }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-      <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-stone-200 bg-white text-stone-400 shadow-xs">{icon ?? <Inbox className="h-5 w-5" aria-hidden />}</span>
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-100 text-stone-400">{icon ?? <Inbox className="h-5 w-5" aria-hidden />}</span>
       <p className="mt-3 text-sm font-semibold text-stone-900">{title}</p>
       {description && <p className="mt-1 max-w-sm text-sm text-stone-500">{description}</p>}
       {action && <div className="mt-4">{action}</div>}
@@ -342,8 +333,8 @@ export function Modal({
           { sm: "sm:max-w-md", md: "sm:max-w-xl", lg: "sm:max-w-3xl", xl: "sm:max-w-5xl" }[size],
         )}
       >
-        <div className="flex items-center justify-between gap-4 border-b border-stone-200/70 px-5 py-4">
-          <h2 id={titleId} className="text-base font-semibold tracking-tight text-stone-950">
+        <div className="flex items-center justify-between gap-4 border-b border-stone-100 px-5 py-4">
+          <h2 id={titleId} className="text-base font-semibold text-stone-950">
             {title}
           </h2>
           <button type="button" onClick={onClose} className="rounded-md p-1 text-stone-400 hover:bg-stone-100 hover:text-stone-700" aria-label={t("Close")}>
@@ -351,7 +342,7 @@ export function Modal({
           </button>
         </div>
         <div className="overflow-y-auto px-5 py-5">{children}</div>
-        {footer && <div className="flex justify-end gap-2 rounded-b-2xl border-t border-stone-200/70 bg-stone-50 px-5 py-3">{footer}</div>}
+        {footer && <div className="flex justify-end gap-2 border-t border-stone-100 px-5 py-3">{footer}</div>}
       </div>
     </div>
   );
