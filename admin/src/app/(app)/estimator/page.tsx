@@ -205,8 +205,8 @@ export default function EstimatorPage() {
                   [t("Total for the client"), money(result.totals.total, currency)],
                   [t("Estimated profit"), `${money(result.totals.profit, currency)} · ${result.totals.margin_percent}%`],
                 ].map(([label, value], i) => (
-                  <div key={label} className={i === 2 ? "rounded-xl bg-brand-500 p-4 text-stone-950" : "rounded-xl border border-stone-200 bg-white p-4"}>
-                    <p className={i === 2 ? "text-xs font-semibold uppercase" : "text-xs font-medium text-stone-500 uppercase"}>{label}</p>
+                  <div key={label} className={i === 2 ? "rounded-xl bg-stone-900 p-4 text-white shadow-sm" : "rounded-xl border border-stone-200 bg-white p-4"}>
+                    <p className={i === 2 ? "text-xs font-medium text-stone-300 uppercase" : "text-xs font-medium text-stone-500 uppercase"}>{label}</p>
                     <p className="mt-1.5 text-lg font-bold whitespace-nowrap tabular-nums">{value}</p>
                   </div>
                 ))}

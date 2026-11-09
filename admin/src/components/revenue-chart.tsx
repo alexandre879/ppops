@@ -54,7 +54,7 @@ export function RevenueChart({ data }: { data: Point[] }) {
             </li>
           ))}
         </ul>
-        <div className="flex rounded-md border border-stone-200 p-0.5 text-xs" role="tablist" aria-label={t("Chart view")}>
+        <div className="flex gap-0.5 rounded-lg bg-stone-100 p-0.5 text-xs" role="tablist" aria-label={t("Chart view")}>
           {(["chart", "table"] as const).map((option) => (
             <button
               key={option}
@@ -62,7 +62,7 @@ export function RevenueChart({ data }: { data: Point[] }) {
               role="tab"
               aria-selected={view === option}
               onClick={() => setView(option)}
-              className={clsx("rounded px-2.5 py-1 font-medium", view === option ? "bg-stone-900 text-white" : "text-stone-600 hover:text-stone-900")}
+              className={clsx("rounded-md px-2.5 py-1 font-medium transition-colors", view === option ? "bg-white text-stone-950 shadow-xs" : "text-stone-500 hover:text-stone-950")}
             >
               {option === "chart" ? t("Chart") : t("Table")}
             </button>
@@ -74,9 +74,9 @@ export function RevenueChart({ data }: { data: Point[] }) {
         <div className="h-64" role="img" aria-label={t("Revenue and expenses for the last 12 months")}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} barGap={2} barCategoryGap="24%" margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-              <CartesianGrid vertical={false} stroke="#f0eeec" />
-              <XAxis dataKey="month" tickFormatter={(value: string) => monthLabel(value)} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "#78716c" }} />
-              <YAxis tickLine={false} axisLine={false} width={64} tick={{ fontSize: 11, fill: "#78716c" }} tickFormatter={(v: number) => compactValue(v)} />
+              <CartesianGrid vertical={false} stroke="#f4f4f5" />
+              <XAxis dataKey="month" tickFormatter={(value: string) => monthLabel(value)} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "#71717a" }} />
+              <YAxis tickLine={false} axisLine={false} width={64} tick={{ fontSize: 11, fill: "#71717a" }} tickFormatter={(v: number) => compactValue(v)} />
               <Tooltip
                 content={(props) => <ChartTooltip active={props.active} payload={props.payload} label={props.label} />}
                 cursor={{ fill: "rgba(28, 25, 23, 0.04)" }}
