@@ -1,3 +1,4 @@
+import shutil
 import tempfile
 
 from django.core.files.base import ContentFile
@@ -13,7 +14,9 @@ class ProjectDocumentAccessTests(APITestCase):
     """Commercial documents follow their own module's roles, not the open "projects" module."""
 
     def setUp(self):
-        self.media = override_settings(PRIVATE_MEDIA_ROOT=tempfile.mkdtemp())
+        folder = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, folder, ignore_errors=True)
+        self.media = override_settings(PRIVATE_MEDIA_ROOT=folder)
         self.media.enable()
         self.addCleanup(self.media.disable)
         project = Project.objects.create(title="House")

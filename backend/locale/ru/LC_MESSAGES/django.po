@@ -215,3 +215,36 @@ msgstr "Услуги"
 
 msgid "Please confirm you are 18 or older and accept the privacy policy."
 msgstr "Подтвердите, что вам исполнилось 18 лет и вы принимаете политику конфиденциальности."
+
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Email"
+msgstr "Эл. почта"
+
+msgid "Company"
+msgstr "Компания"
+
+msgid "Service"
+msgstr "Услуга"
+
+msgid "Subject"
+msgstr "Тема"
+
+msgid "Location"
+msgstr "Адрес объекта"
+
+msgid "Message:"
+msgstr "Сообщение:"
+
+#, python-brace-format
+msgid "Open it in the admin platform: {url}"
+msgstr "Откройте в платформе управления: {url}"
+
+#, python-brace-format
+msgid "New enquiry from the website: {name}"
+msgstr "Новая заявка с сайта: {name}"

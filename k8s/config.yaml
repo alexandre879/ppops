@@ -22,3 +22,6 @@ data:
   SEED_ON_START: "false"
   API_INTERNAL_URL: http://backend:8000
   SITE_URL: https://newhousemodern.shop
+  # Linked from new-enquiry email alerts. EMAIL_URL and ENQUIRY_NOTIFY_EMAILS hold a password and
+  # staff addresses, so they go in the ppops-secrets secret, not here.
+  ADMIN_URL: https://newhousemodern.shop/admin

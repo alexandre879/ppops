@@ -50,6 +50,8 @@ services:
       ADMIN_PASSWORD: "ChangeMe-2026!"
       SEED_ON_START: "true"
       SEED_ARGS: --demo
+      # Linked from new-enquiry alerts, which DEBUG prints to the backend log.
+      ADMIN_URL: http://localhost:3001
     ports:
       - "8000:8000"
     volumes:

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ProjectCard } from "@/components/cards";
 import { FacadeIllustration } from "@/components/facade-illustration";
 import { CategoryIconView } from "@/components/icons";
+import { JsonLd } from "@/components/json-ld";
 import { MediaImage } from "@/components/media";
 import { ContactSection, ProcessSection, WhyUsSection } from "@/components/sections";
 import { TextureSwatch } from "@/components/texture-swatch";
@@ -14,6 +15,7 @@ import { getDictionary } from "@/i18n";
 import { getCategories, getProducts, getProjects, getSite } from "@/lib/api";
 import { FINISHES } from "@/lib/content";
 import { telHref } from "@/lib/format";
+import { homeStructuredData } from "@/lib/structured-data";
 
 const HIGHLIGHT_ICONS = [Factory, ShieldCheck, Building2, Clock];
 
@@ -37,21 +39,9 @@ export default async function HomePage({ params }: Props) {
   ].filter((stat) => stat.value > 0);
   const productNames = products.length >= 3 ? products.map((p) => p.name) : dict.capabilities;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "GeneralContractor",
-    name: site.company_name,
-    description: site.about_text,
-    telephone: site.phones,
-    inLanguage: lang,
-    ...(site.email && { email: site.email }),
-    ...(site.address && { address: site.address }),
-    areaServed: "Georgia",
-  };
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={homeStructuredData(site, lang)} />
 
       {/* Hero: frosted panel over moving orange light */}
       <section className="relative isolate overflow-clip bg-stone-950 text-white">

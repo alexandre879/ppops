@@ -136,7 +136,8 @@ hides what a role cannot use.
 
 ## How the main workflows fit together
 
-1. **Enquiry** arrives from the website form (honeypot + rate limit) → *Enquiries*.
+1. **Enquiry** arrives from the website form (honeypot + rate limit) → *Enquiries*, and is
+   emailed to staff when [enquiry alerts](#email-alerts-for-new-enquiries) are set up.
 2. **Convert** it to a customer → log calls, meetings and site visits on the customer.
 3. **Quotation** → add lines manually or *Add from a service*: the estimator uses the
    service **recipe** (material consumption per m² + waste %) and **labour norm**, with
@@ -172,6 +173,38 @@ the company's phone number. Each question is a paid API call (model `claude-opus
 `ASSISTANT_MODEL` to change it), limited per visitor by `THROTTLE_ASSISTANT` (default 30
 an hour). Internal data (costs, budgets, customers, labour norms, stock) is never read, and
 content edited in the admin is used from the next question on.
+
+## Email alerts for new enquiries
+
+Each enquiry sent from the website form can be emailed to staff straight away, so a lead isn't
+left waiting until someone opens *Enquiries*. The email lists the visitor's name, phone, email,
+service, address and message, links to *Enquiries* in the admin, and is written in Georgian
+whatever language the visitor used. *Reply* answers the visitor directly.
+
+It is off until both of these are set (`backend/apps/crm/notifications.py`):
+
+| Setting | Example |
+|---|---|
+| `EMAIL_URL` — the mail server | `smtp+tls://office%40example.com:app-password@smtp.gmail.com:587` (`smtp+ssl://` for port 465; write `@` in the user name as `%40`) |
+| `ENQUIRY_NOTIFY_EMAILS` — who gets the alert | `sales@example.com,owner@example.com` |
+| `DEFAULT_FROM_EMAIL` — sender (optional) | defaults to the mail server user name |
+| `ADMIN_URL` — link in the email (optional) | `https://newhousemodern.shop/admin` |
+
+With Gmail, create an *app password* (Google account → Security → 2-Step Verification → App
+passwords) and use it instead of the account password. A mail problem never loses the enquiry:
+it is saved first, and the failure is written to the backend log. In development (`DEBUG` on,
+no `EMAIL_URL`) alerts are printed to the backend log instead of being sent.
+
+In production the mail settings hold a password, so they go in the `ppops-secrets` secret on the
+server (as root), not in `k8s/`:
+
+```bash
+kubectl -n ppops patch secret ppops-secrets --type merge -p \
+  '{"stringData":{"EMAIL_URL":"smtp+tls://…","ENQUIRY_NOTIFY_EMAILS":"sales@example.com"}}'
+kubectl -n ppops rollout restart deploy/backend
+```
+
+`ADMIN_URL` is in `k8s/config.yaml` and takes effect after `./k8s/full-deploy.sh`.
 
 ## Security notes
 
@@ -213,13 +246,29 @@ whole server. Apply them by hand with `./k8s/full-deploy.sh`, which needs root a
 Secrets the app needs (`ppops-postgres`, `ppops-secrets`) are created once by `deploy.sh` and live
 only on the server; none belong in `k8s/`.
 
+### Backups
+
+What is backed up today: a database dump taken just before each deploy, in `/srv/backups/ppops/`
+on the same server (the last 7). What is **not**: uploaded files (the `media` and
+`private-media` volumes: photos, contracts, project documents, receipts), changes made since the
+last deploy, and anything off the server, so losing the Droplet loses everything. Until a
+scheduled, off-server backup is set up, copy `/srv/backups/ppops/` and both volumes elsewhere
+regularly, or enable DigitalOcean Droplet backups.
+
 ## Tests & checks
 
+Every pull request runs these automatically ([`.github/workflows/ci.yml`](.github/workflows/ci.yml),
+*Checks* on GitHub), so merge only when they are green: merging to `main` deploys.
+
 ```bash
-cd backend && .venv/bin/python manage.py test apps   # API, permissions, estimator, PDF, stock
+cd backend && .venv/bin/python manage.py check && .venv/bin/python manage.py makemigrations --check --dry-run
+cd backend && .venv/bin/python manage.py test apps   # API, permissions, estimator, PDF, stock, alerts
 cd web && npm run lint && npm run typecheck && npm run build
 cd admin && npm run lint && npm run typecheck && npm run build
 ```
+
+Dependabot ([`.github/dependabot.yml`](.github/dependabot.yml)) opens monthly pull requests for
+npm packages and GitHub Actions.
 
 ## Project layout
 

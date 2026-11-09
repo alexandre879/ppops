@@ -46,10 +46,11 @@ cd admin && npm run typecheck
 ### Single test
 
 ```bash
-# Backend: cd backend && .venv/bin/python manage.py test apps.<test_name>
-# Web: cd web && npm test -- <test-path>
-# Admin: cd admin && npm test -- <test-path>
+# Backend: cd backend && .venv/bin/python manage.py test apps.<app>.tests.<TestClass>.<test_method>
+# Web and admin have no unit tests (no `npm test`); rely on lint + typecheck + build.
 ```
+
+Pull requests run all of these in `.github/workflows/ci.yml` (plus `makemigrations --check`).
 
 ### Development
 

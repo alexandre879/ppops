@@ -1,5 +1,7 @@
 """Upload storage and validation shared by every app."""
 
+import os
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
@@ -14,9 +16,23 @@ DOCUMENT_EXTENSIONS = [
 ]
 
 
+class PrivateStorage(FileSystemStorage):
+    """Files under settings.PRIVATE_MEDIA_ROOT, which is only reachable through authenticated API
+    endpoints. The folder is read on each use, not fixed when the models load, so a test that
+    points PRIVATE_MEDIA_ROOT at a temporary folder keeps its files out of the real one."""
+
+    @property
+    def base_location(self):
+        return settings.PRIVATE_MEDIA_ROOT
+
+    @property
+    def location(self):
+        return os.path.abspath(self.base_location)
+
+
 def private_storage():
     """Storage for confidential files (contracts, documents, receipts)."""
-    return FileSystemStorage(location=settings.PRIVATE_MEDIA_ROOT)
+    return PrivateStorage()
 
 
 def validate_file_size(file):

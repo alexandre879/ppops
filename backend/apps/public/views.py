@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -12,6 +13,7 @@ from rest_framework.views import APIView
 from apps.catalog.models import Service, ServiceCategory, Solution
 from apps.core.models import SiteSettings
 from apps.crm.models import Source
+from apps.crm.notifications import notify_new_enquiry
 from apps.inventory.models import Product
 
 from . import assistant
@@ -126,11 +128,12 @@ class EnquiryCreateView(PublicMixin, generics.CreateAPIView):
         honeypot = serializer.validated_data.pop("website", "")
         serializer.validated_data.pop("privacy_consent", None)
         if not honeypot:
-            serializer.save(
+            enquiry = serializer.save(
                 source=Source.WEBSITE,
                 ip_address=BaseThrottle().get_ident(request),
                 privacy_consent_at=timezone.now(),
             )
+            transaction.on_commit(lambda: notify_new_enquiry(enquiry))
         # Bots get the same success response so they don't retry.
         return Response({"detail": _("Thank you! We will contact you shortly.")}, status=status.HTTP_201_CREATED)
 

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/json-ld";
 import { MediaImage } from "@/components/media";
 import { CtaBand } from "@/components/sections";
 import { Chip, Container, Eyebrow, LiquidBackdrop } from "@/components/ui";
@@ -10,6 +11,7 @@ import { isLocale, languageAlternates, localePath } from "@/i18n/config";
 import { getDictionary, label } from "@/i18n";
 import { getProject, getSite } from "@/lib/api";
 import { formatNumber } from "@/lib/format";
+import { projectStructuredData } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ lang: string; slug: string }> };
 
@@ -41,6 +43,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd data={projectStructuredData(site, lang, project, { projects: dict.nav.projects })} />
       <section className="relative isolate overflow-clip bg-stone-50">
         <LiquidBackdrop tone="light" />
         <Container className="pt-24 pb-12 sm:pt-32 sm:pb-14 lg:pt-36">

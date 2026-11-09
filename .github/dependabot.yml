@@ -1,0 +1,33 @@
+# Opens monthly pull requests with dependency updates; the Checks workflow tests each one.
+# Merging one deploys it (deploy.yml), so read the release notes of major updates first.
+#
+# Python packages are left out on purpose: requirements.txt pins ranges (Django 5.2 LTS,
+# django-modeltranslation < 0.21) and every deploy build already installs the newest patch
+# releases inside them.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    groups:
+      web-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /admin
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    groups:
+      admin-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
