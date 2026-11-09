@@ -182,7 +182,7 @@ export default function QuotationDetailPage() {
                 <dt className="text-stone-600">{t("VAT {rate}%", { rate: Number(quote.vat_percent) })}</dt>
                 <dd className="tabular-nums">{money(quote.vat_amount, currency)}</dd>
               </div>
-              <div className="flex justify-between gap-2 rounded-lg bg-stone-900 px-3 py-2 text-base font-semibold text-white">
+              <div className="flex justify-between gap-2 rounded-md bg-brand-500 px-3 py-2 text-base font-bold text-stone-950">
                 <dt>{t("Total")}</dt>
                 <dd className="whitespace-nowrap tabular-nums">{money(quote.total, currency)}</dd>
               </div>
@@ -275,7 +275,7 @@ export default function QuotationDetailPage() {
         size="xl"
         footer={
           pdf && (
-            <a href={pdf.url} download={pdf.filename} className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-stone-900 px-3.5 text-sm font-medium text-white shadow-sm hover:bg-stone-700">
+            <a href={pdf.url} download={pdf.filename} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-brand-500 px-3.5 text-sm font-semibold text-stone-950 hover:bg-brand-400">
               <Download className="h-4 w-4" aria-hidden /> {t("Download PDF")}
             </a>
           )

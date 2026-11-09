@@ -4,7 +4,6 @@ import clsx from "clsx";
 import {
   Boxes,
   Calculator,
-  ChevronRight,
   ExternalLink,
   Factory,
   FileSignature,
@@ -96,11 +95,11 @@ function activeHref(pathname: string) {
 
 function Brand() {
   return (
-    <Link href="/" className="flex items-center gap-2.5 rounded-lg px-2 py-1">
+    <Link href="/" className="flex items-center gap-2.5 px-2">
       <BrandMark />
       <span className="leading-tight">
-        <span className="block text-sm font-semibold tracking-tight text-stone-950">New House World</span>
-        <span className="block text-[11px] font-medium text-stone-500">{t("Management platform")}</span>
+        <span className="block text-sm font-bold text-white">New House World</span>
+        <span className="block text-[11px] font-medium text-stone-400">{t("Management platform")}</span>
       </span>
     </Link>
   );
@@ -116,8 +115,8 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         if (!items.length) return null;
         return (
           <div key={group.label || index}>
-            {group.label && <p className="mb-1 px-2.5 text-[11px] font-medium tracking-wide text-stone-500 uppercase">{group.label}</p>}
-            <ul className="space-y-px">
+            {group.label && <p className="mb-1.5 px-3 text-[11px] font-semibold tracking-wider text-stone-500 uppercase">{group.label}</p>}
+            <ul className="space-y-0.5">
               {items.map(({ href, label, icon: Icon }) => {
                 const active = href === current;
                 return (
@@ -127,13 +126,12 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
                       onClick={onNavigate}
                       aria-current={active ? "page" : undefined}
                       className={clsx(
-                        "group relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-colors",
-                        active ? "bg-stone-100 text-stone-950" : "text-stone-600 hover:bg-stone-100/70 hover:text-stone-950",
+                        "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                        active ? "bg-brand-500 text-stone-950" : "text-stone-300 hover:bg-white/5 hover:text-white",
                       )}
                     >
-                      {active && <span className="absolute top-1/2 -left-3 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-brand-500" aria-hidden />}
-                      <Icon className={clsx("h-4 w-4 shrink-0", active ? "text-brand-600" : "text-stone-400 group-hover:text-stone-600")} aria-hidden />
-                      <span className="truncate">{label}</span>
+                      <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                      {label}
                     </Link>
                   </li>
                 );
@@ -150,14 +148,14 @@ function UserCard() {
   const { user, signOut } = useAuth();
   if (!user) return null;
   return (
-    <div className="border-t border-stone-200 p-3">
-      <div className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-stone-100/70">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-900 text-[11px] font-semibold text-white">{initials(user.full_name || user.email)}</span>
+    <div className="border-t border-white/10 p-3">
+      <div className="flex items-center gap-2.5 rounded-md px-2 py-2">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-700 text-xs font-bold text-white">{initials(user.full_name || user.email)}</span>
         <Link href="/account" className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-medium text-stone-950">{user.full_name || user.email}</span>
-          <span className="block truncate text-xs text-stone-500">{choiceLabel(CHOICES.role, user.role)}</span>
+          <span className="block truncate text-sm font-medium text-white">{user.full_name || user.email}</span>
+          <span className="block truncate text-xs text-stone-400">{choiceLabel(CHOICES.role, user.role)}</span>
         </Link>
-        <button type="button" onClick={() => void signOut()} className="rounded-md p-1.5 text-stone-400 transition-colors hover:bg-stone-200/70 hover:text-stone-900" aria-label={t("Sign out")} title={t("Sign out")}>
+        <button type="button" onClick={() => void signOut()} className="rounded-md p-1.5 text-stone-400 hover:bg-white/5 hover:text-white" aria-label={t("Sign out")} title={t("Sign out")}>
           <LogOut className="h-4 w-4" />
         </button>
       </div>
@@ -174,7 +172,7 @@ export function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
     setLanguage(code);
   };
   return (
-    <div role="group" aria-label={t("Language")} className={clsx("flex gap-0.5 rounded-lg p-0.5", dark ? "bg-white/10" : "bg-stone-100")}>
+    <div role="group" aria-label={t("Language")} className={clsx("flex gap-0.5 rounded-md p-0.5", dark ? "bg-white/10" : "border border-stone-200")}>
       {LANGUAGES.map(({ code, short, label }) => (
         <button
           key={code}
@@ -184,8 +182,8 @@ export function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
           aria-pressed={code === lang}
           onClick={() => void choose(code)}
           className={clsx(
-            "rounded-md px-2 py-1 text-xs font-semibold transition-colors",
-            code === lang ? (dark ? "bg-white text-stone-950" : "bg-white text-stone-950 shadow-xs") : dark ? "text-stone-300 hover:text-white" : "text-stone-500 hover:text-stone-950",
+            "rounded px-2 py-1 text-xs font-semibold transition-colors",
+            code === lang ? (dark ? "bg-white text-stone-950" : "bg-stone-900 text-white") : dark ? "text-stone-300 hover:text-white" : "text-stone-600 hover:text-stone-950",
           )}
         >
           {short}
@@ -195,44 +193,15 @@ export function LanguageSwitcher({ dark = false }: { dark?: boolean }) {
   );
 }
 
-/** Menu entry for the current path, with the group it sits in. */
-function currentEntry(pathname: string) {
-  const href = activeHref(pathname);
-  const group = NAV.find((entry) => entry.items.some((item) => item.href === href));
-  const item = group?.items.find((entry) => entry.href === href);
-  return { group, item, page: pathname === "/account" ? t("My account") : item?.label };
-}
-
 /** Browser tab title in the interface language (the server cannot know it). */
 function useDocumentTitle() {
   const pathname = usePathname();
   useEffect(() => {
-    const { page } = currentEntry(pathname);
+    const href = activeHref(pathname);
+    const item = NAV.flatMap((group) => group.items).find((entry) => entry.href === href);
+    const page = pathname === "/account" ? t("My account") : item?.label;
     document.title = page ? `${page} · New House World` : "New House World";
   }, [pathname]);
-}
-
-/** "Group › Page" in the top bar, so the header always says where you are. */
-function Crumbs() {
-  const { group, item, page } = currentEntry(usePathname());
-  if (!page) return <span />;
-  return (
-    <p className="flex min-w-0 items-center gap-1.5 text-sm">
-      {group?.label && (
-        <>
-          <span className="hidden text-stone-500 sm:inline">{group.label}</span>
-          <ChevronRight className="hidden h-3.5 w-3.5 shrink-0 text-stone-300 sm:inline" aria-hidden />
-        </>
-      )}
-      {item ? (
-        <Link href={item.href} className="truncate font-medium text-stone-950">
-          {page}
-        </Link>
-      ) : (
-        <span className="truncate font-medium text-stone-950">{page}</span>
-      )}
-    </p>
-  );
 }
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -248,8 +217,8 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-dvh lg:pl-64">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-stone-200 bg-white lg:flex">
-        <div className="flex h-14 items-center border-b border-stone-200 px-3">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-stone-950 lg:flex">
+        <div className="flex h-16 items-center border-b border-white/10 px-3">
           <Brand />
         </div>
         <SidebarNav />
@@ -258,11 +227,11 @@ export function Shell({ children }: { children: ReactNode }) {
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-stone-950/30 backdrop-blur-[2px]" onClick={() => setOpen(false)} aria-hidden />
-          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-white shadow-2xl">
-            <div className="flex h-14 items-center justify-between border-b border-stone-200 px-3">
+          <div className="absolute inset-0 bg-stone-950/50" onClick={() => setOpen(false)} aria-hidden />
+          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-stone-950">
+            <div className="flex h-16 items-center justify-between border-b border-white/10 px-3">
               <Brand />
-              <button type="button" onClick={() => setOpen(false)} className="rounded-md p-2 text-stone-500 hover:bg-stone-100 hover:text-stone-900" aria-label={t("Close menu")}>
+              <button type="button" onClick={() => setOpen(false)} className="rounded-md p-2 text-stone-400 hover:text-white" aria-label={t("Close menu")}>
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -272,27 +241,21 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-stone-200 bg-white/80 px-4 backdrop-blur-md sm:px-6 lg:px-8">
-        <button type="button" onClick={() => setOpen(true)} className="-ml-2 rounded-md p-2 text-stone-700 hover:bg-stone-100 lg:hidden" aria-label={t("Open menu")}>
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-stone-200 bg-white/90 px-4 backdrop-blur sm:px-6">
+        <button type="button" onClick={() => setOpen(true)} className="-ml-2 rounded-md p-2 text-stone-700 lg:hidden" aria-label={t("Open menu")}>
           <Menu className="h-5 w-5" />
         </button>
-        <div className="min-w-0 flex-1">
-          <Crumbs />
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <span className="text-sm font-semibold text-stone-900 lg:hidden">NHM</span>
+        <div className="hidden lg:block" />
+        <div className="flex items-center gap-4">
           <LanguageSwitcher />
-          <a
-            href={`${siteUrl}/${lang}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden h-8 items-center gap-1.5 rounded-lg border border-stone-200 bg-white px-2.5 text-xs font-medium text-stone-700 shadow-xs transition-colors hover:bg-stone-50 hover:text-stone-950 sm:inline-flex"
-          >
-            {t("View website")} <ExternalLink className="h-3.5 w-3.5 text-stone-400" aria-hidden />
+          <a href={`${siteUrl}/${lang}`} target="_blank" rel="noopener noreferrer" className="hidden items-center gap-1.5 text-sm font-medium text-stone-600 hover:text-stone-950 sm:inline-flex">
+            {t("View website")} <ExternalLink className="h-3.5 w-3.5" aria-hidden />
           </a>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <main className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">
         <Suspense>{children}</Suspense>
       </main>
     </div>
