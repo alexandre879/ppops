@@ -215,3 +215,36 @@ msgstr "მომსახურება"
 
 msgid "Please confirm you are 18 or older and accept the privacy policy."
 msgstr "გთხოვთ, დაადასტუროთ, რომ ხართ 18 წლის ან მეტის და ეთანხმებით კონფიდენციალურობის პოლიტიკას."
+
+
+msgid "Name"
+msgstr "სახელი"
+
+msgid "Phone"
+msgstr "ტელეფონი"
+
+msgid "Email"
+msgstr "ელ-ფოსტა"
+
+msgid "Company"
+msgstr "კომპანია"
+
+msgid "Service"
+msgstr "მომსახურება"
+
+msgid "Subject"
+msgstr "თემა"
+
+msgid "Location"
+msgstr "ობიექტის მისამართი"
+
+msgid "Message:"
+msgstr "შეტყობინება:"
+
+#, python-brace-format
+msgid "Open it in the admin platform: {url}"
+msgstr "გახსენით მართვის პლატფორმაში: {url}"
+
+#, python-brace-format
+msgid "New enquiry from the website: {name}"
+msgstr "ახალი მოთხოვნა საიტიდან: {name}"

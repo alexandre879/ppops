@@ -223,6 +223,20 @@ PDF_FONT_BOLD = env("PDF_FONT_BOLD", default="")
 ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY", default="")
 ASSISTANT_MODEL = env("ASSISTANT_MODEL", default="claude-opus-5-5")
 
+# Outgoing email, used to alert staff about new website enquiries (apps/crm/notifications.py).
+# Off until EMAIL_URL is set, e.g. smtp+tls://user%40example.com:app-password@smtp.example.com:587
+# (smtp+ssl:// for port 465; URL-encode "@" and other special characters in the user name and
+# password). Without it, development prints emails to the console and production drops them.
+EMAIL_URL = env("EMAIL_URL", default="")
+vars().update(env.email_url_config(EMAIL_URL or ("consolemail://" if DEBUG else "dummymail://")))
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=10)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="") or EMAIL_HOST_USER or "webmaster@localhost"  # noqa: F821
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+# Who hears about each new website enquiry (comma-separated). Empty: nobody is emailed.
+ENQUIRY_NOTIFY_EMAILS = [a.strip() for a in env.list("ENQUIRY_NOTIFY_EMAILS", default=[]) if a.strip()]
+# Linked from the alert so staff can open the enquiry; e.g. https://newhousemodern.shop/admin
+ADMIN_URL = env("ADMIN_URL", default="").rstrip("/")
+
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     # Enable both once the site is served over HTTPS (see .env.example).

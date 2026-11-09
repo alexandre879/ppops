@@ -10,7 +10,8 @@ const config = [
       "@next/next/no-img-element": "off",
     },
   },
-  { ignores: [".next/**", "node_modules/**", "next-env.d.ts"] },
+  // .trail/ holds a developer tool's hook script, not website code.
+  { ignores: [".next/**", "node_modules/**", "next-env.d.ts", ".trail/**"] },
 ];
 
 export default config;

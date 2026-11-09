@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ProjectCard } from "@/components/cards";
+import { JsonLd } from "@/components/json-ld";
 import { MediaImage } from "@/components/media";
 import { CtaBand } from "@/components/sections";
 import { ButtonLink, buttonClass, Chip, Container, Eyebrow, LiquidBackdrop } from "@/components/ui";
@@ -11,6 +12,7 @@ import { isLocale, languageAlternates, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { getService, getSite } from "@/lib/api";
 import { formatPrice, telHref } from "@/lib/format";
+import { serviceStructuredData } from "@/lib/structured-data";
 
 type Props = { params: Promise<{ lang: string; slug: string }> };
 
@@ -33,8 +35,14 @@ export default async function ServicePage({ params }: Props) {
   const paragraphs = service.description.split(/\n{2,}/).filter(Boolean);
   const contactHref = `${localePath(lang, "/contact")}?service=${service.slug}`;
 
+  const structuredData = serviceStructuredData(site, lang, service, {
+    services: dict.nav.services,
+    unit: dict.labels.unit[service.unit] ?? service.unit_display,
+  });
+
   return (
     <>
+      <JsonLd data={structuredData} />
       <section className="relative isolate overflow-clip border-b border-stone-200/70 bg-stone-50">
         <LiquidBackdrop tone="light" />
         <Container className="pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-36">

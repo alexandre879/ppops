@@ -1,6 +1,8 @@
 from unittest import mock
 
+from django.core import mail
 from django.core.cache import cache
+from django.test import override_settings
 from rest_framework.test import APITestCase
 
 from apps.catalog.models import Service, ServiceCategory, Solution
@@ -132,3 +134,63 @@ class PublicApiTests(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertFalse(Enquiry.objects.exists())
+
+
+@override_settings(
+    ENQUIRY_NOTIFY_EMAILS=["sales@example.com", "owner@example.com"],
+    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+    ADMIN_URL="https://example.com/admin",
+)
+class EnquiryAlertTests(APITestCase):
+    """New website enquiries are emailed to staff, in the staff language, without ever losing the lead."""
+
+    def setUp(self):
+        cache.clear()
+        category = ServiceCategory.objects.create(name="Cladding")
+        self.service = Service.objects.create(category=category, title="ACP cladding", title_ka="ACP მოპირკეთება")
+
+    def send(self, **extra):
+        data = {"name": "Nino\nBeridze", "phone": "+995 555 11 22 33", "email": "nino@example.com",
+                "service": self.service.slug, "message": "Price for 300 m² please", "privacy_consent": True, **extra}
+        with self.captureOnCommitCallbacks(execute=True):
+            return self.client.post("/api/public/enquiries/", data, format="json", HTTP_ACCEPT_LANGUAGE="en")
+
+    def test_enquiry_is_emailed_to_staff_in_georgian(self):
+        self.assertEqual(self.send().status_code, 201)
+        self.assertEqual(len(mail.outbox), 1)
+        alert = mail.outbox[0]
+        self.assertEqual(alert.to, ["sales@example.com", "owner@example.com"])
+        self.assertEqual(alert.reply_to, ["nino@example.com"])
+        # A line break in the name must not break the subject header.
+        self.assertEqual(alert.subject, "ახალი მოთხოვნა საიტიდან: Nino Beridze")
+        self.assertIn("ტელეფონი: +995 555 11 22 33", alert.body)
+        self.assertIn("მომსახურება: ACP მოპირკეთება", alert.body)
+        self.assertIn("Price for 300 m² please", alert.body)
+        self.assertIn("https://example.com/admin/enquiries", alert.body)
+        alert.message()  # headers are valid
+
+    def test_no_reply_to_without_visitor_email(self):
+        self.send(email="")
+        self.assertEqual(mail.outbox[0].reply_to, [])
+
+    @override_settings(ENQUIRY_NOTIFY_EMAILS=[])
+    def test_nobody_is_emailed_without_recipients(self):
+        self.assertEqual(self.send().status_code, 201)
+        self.assertEqual(mail.outbox, [])
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.dummy.EmailBackend")
+    def test_missing_email_server_is_logged(self):
+        with self.assertLogs("apps.crm.notifications", "WARNING"):
+            self.assertEqual(self.send().status_code, 201)
+        self.assertTrue(Enquiry.objects.exists())
+
+    def test_bots_do_not_trigger_alerts(self):
+        self.send(website="http://spam.example")
+        self.assertEqual(mail.outbox, [])
+
+    def test_mail_failure_keeps_the_lead(self):
+        with mock.patch("django.core.mail.EmailMessage.send", side_effect=OSError("SMTP down")):
+            with self.assertLogs("apps.crm.notifications", "ERROR"):
+                response = self.send()
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Enquiry.objects.count(), 1)
