@@ -119,7 +119,7 @@ function LoginForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="group flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-500 text-sm font-semibold text-stone-950 shadow-sm transition-colors hover:bg-brand-400 disabled:cursor-not-allowed disabled:opacity-60"
+        className="group flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-stone-900 text-sm font-medium text-white shadow-sm transition-colors hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {t("Sign in")}
         {submitting ? (
@@ -134,45 +134,50 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="grid min-h-dvh bg-stone-50 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <aside className="hidden flex-col justify-between bg-stone-950 p-12 text-white lg:flex xl:p-16">
-        <div className="flex items-center gap-3">
+    <div className="grid min-h-dvh bg-white lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+      <aside className="relative hidden flex-col justify-between overflow-hidden border-r border-stone-200 bg-stone-50 p-12 lg:flex xl:p-16">
+        {/* Dot grid, faded out toward the bottom-right corner. */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--color-stone-300)_1px,transparent_1px)] [mask-image:linear-gradient(135deg,black,transparent_75%)] bg-[size:22px_22px]"
+          aria-hidden
+        />
+        <div className="relative flex items-center gap-3">
           <BrandMark className="h-11 w-11" />
           <span className="leading-tight">
-            <span className="block text-base font-bold">New House World</span>
-            <span className="block text-xs font-medium text-stone-400">{t("Management platform")}</span>
+            <span className="block text-base font-semibold tracking-tight text-stone-950">New House World</span>
+            <span className="block text-xs font-medium text-stone-500">{t("Management platform")}</span>
           </span>
         </div>
-        <div>
-          <p className="max-w-lg text-3xl leading-tight font-bold tracking-tight xl:text-4xl">
-            {t("Projects, customers, quotations and production —")} <span className="text-brand-400">{t("in one place.")}</span>
+        <div className="relative">
+          <p className="max-w-lg text-3xl leading-tight font-semibold tracking-tight text-stone-950 xl:text-4xl">
+            {t("Projects, customers, quotations and production —")} <span className="text-brand-600">{t("in one place.")}</span>
           </p>
-          <p className="mt-4 max-w-md text-stone-400">{t("The internal management platform for the New House World team.")}</p>
+          <p className="mt-4 max-w-md text-stone-600">{t("The internal management platform for the New House World team.")}</p>
           <ul className="mt-10 grid max-w-md grid-cols-2 gap-3">
             {MODULES.map(({ label, icon: Icon }) => (
-              <li key={label} className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3.5 ring-1 ring-white/10">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-500/15 text-brand-400">
+              <li key={label} className="flex items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3.5 shadow-xs">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
                   <Icon className="h-4.5 w-4.5" aria-hidden />
                 </span>
-                <span className="text-sm font-semibold text-stone-200">{label}</span>
+                <span className="text-sm font-medium text-stone-800">{label}</span>
               </li>
             ))}
           </ul>
         </div>
       </aside>
 
-      <main className="relative flex items-center justify-center px-4 py-20 sm:px-6">
+      <main className="relative flex items-center justify-center bg-white px-4 py-20 sm:px-6">
         <div className="absolute top-4 right-4">
           <LanguageSwitcher />
         </div>
         <div className="w-full max-w-md">
-          {/* The dark brand panel is desktop-only; keep the logo on small screens. */}
+          {/* The brand panel is desktop-only; keep the logo on small screens. */}
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <BrandMark className="h-10 w-10" />
-            <span className="text-base font-bold text-stone-950">New House World</span>
+            <span className="text-base font-semibold tracking-tight text-stone-950">New House World</span>
           </div>
-          <div className="rounded-3xl border border-stone-200/80 bg-white p-7 shadow-[0_20px_50px_-24px_rgb(28_25_23/0.25)] sm:p-9">
-            <h1 className="text-2xl font-bold tracking-tight text-stone-950">{t("Sign in")}</h1>
+          <div className="rounded-2xl border border-stone-200 bg-white p-7 shadow-[0_24px_60px_-28px_rgb(9_9_11/0.22)] sm:p-9">
+            <h1 className="text-2xl font-semibold tracking-tight text-stone-950">{t("Sign in")}</h1>
             <p className="mt-1.5 mb-7 text-sm text-stone-500">{t("Use your company account to continue.")}</p>
             <Suspense>
               <LoginForm />

@@ -53,7 +53,7 @@ export default function DashboardPage() {
       <PageHeader title={user?.first_name ? `${greeting()}, ${user.first_name}` : greeting()} description={today} />
 
       {/* KPI row */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 2xl:grid-cols-6">
         <StatCard
           label={t("Active projects")}
           value={projects.active}
@@ -131,8 +131,8 @@ export default function DashboardPage() {
                     </Link>
                     <span className="font-semibold text-stone-900 tabular-nums">{row.count}</span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-stone-100">
-                    <div className="h-full rounded-full bg-stone-700" style={{ width: `${(row.count / max) * 100}%` }} />
+                  <div className="h-1.5 overflow-hidden rounded-full bg-stone-100">
+                    <div className="h-full rounded-full bg-stone-800" style={{ width: `${(row.count / max) * 100}%` }} />
                   </div>
                 </li>
               );
@@ -141,11 +141,11 @@ export default function DashboardPage() {
           <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-stone-100 pt-4">
             <div>
               <dt className="text-xs text-stone-500">{t("Completed this year")}</dt>
-              <dd className="text-lg font-bold text-stone-900">{projects.completed_this_year}</dd>
+              <dd className="mt-0.5 text-xl font-semibold tracking-tight text-stone-950 tabular-nums">{projects.completed_this_year}</dd>
             </div>
             <div>
               <dt className="text-xs text-stone-500">{t("On-time delivery")}</dt>
-              <dd className="text-lg font-bold text-stone-900">{projects.on_time_rate === null ? "—" : `${projects.on_time_rate}%`}</dd>
+              <dd className="mt-0.5 text-xl font-semibold tracking-tight text-stone-950 tabular-nums">{projects.on_time_rate === null ? "—" : `${projects.on_time_rate}%`}</dd>
             </div>
           </dl>
         </Card>
@@ -157,7 +157,7 @@ export default function DashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[560px] text-sm">
                 <thead>
-                  <tr className="border-b border-stone-100 text-left text-xs text-stone-500">
+                  <tr className="border-b border-stone-200 bg-stone-50 text-left text-xs text-stone-500">
                     <th className="px-5 py-2.5 font-medium">{t("Project")}</th>
                     <th className="px-3 py-2.5 font-medium">{t("Progress")}</th>
                     <th className="px-3 py-2.5 font-medium">{t("Deadline")}</th>
@@ -286,7 +286,7 @@ export default function DashboardPage() {
                 [t("Win rate"), customers.conversion_rate === null ? "—" : `${customers.conversion_rate}%`],
               ].map(([label, value]) => (
                 <div key={label} className="px-2 py-3">
-                  <p className="text-base font-bold text-stone-900">{value}</p>
+                  <p className="text-base font-semibold tracking-tight text-stone-950 tabular-nums">{value}</p>
                   <p className="text-[11px] text-stone-500">{label}</p>
                 </div>
               ))}
@@ -320,11 +320,11 @@ export default function DashboardPage() {
             )}
             <div className="grid grid-cols-2 border-t border-stone-100 text-center">
               <div className="px-2 py-3">
-                <p className="text-base font-bold text-stone-900">{compactMoney(quotations.accepted_year_value)}</p>
+                <p className="text-base font-semibold tracking-tight text-stone-950 tabular-nums">{compactMoney(quotations.accepted_year_value)}</p>
                 <p className="text-[11px] text-stone-500">{t("Accepted this year")}</p>
               </div>
               <div className="px-2 py-3">
-                <p className="text-base font-bold text-stone-900">{quotations.acceptance_rate === null ? "—" : `${quotations.acceptance_rate}%`}</p>
+                <p className="text-base font-semibold tracking-tight text-stone-950 tabular-nums">{quotations.acceptance_rate === null ? "—" : `${quotations.acceptance_rate}%`}</p>
                 <p className="text-[11px] text-stone-500">{t("Acceptance rate")}</p>
               </div>
             </div>

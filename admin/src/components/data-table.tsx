@@ -65,18 +65,18 @@ export function DataTable<T extends Row>({
     <div className={clsx("overflow-x-auto transition-opacity", fetching && "opacity-60")}>
       <table className="w-full min-w-[640px] text-sm">
         <thead>
-          <tr className="border-b border-stone-200 bg-stone-50/70 text-left">
+          <tr className="border-b border-stone-200 bg-stone-50 text-left">
             {columns.map((column) => {
               const active = ordering === column.sort || ordering === `-${column.sort}`;
               return (
                 <th
                   key={column.key}
                   scope="col"
-                  className={clsx("px-4 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap text-stone-500 uppercase", column.align === "right" && "text-right", column.className)}
+                  className={clsx("h-10 px-4 text-xs font-medium whitespace-nowrap text-stone-500", column.align === "right" && "text-right", column.className)}
                   aria-sort={active ? (ordering?.startsWith("-") ? "descending" : "ascending") : undefined}
                 >
                   {column.sort && onOrderingChange ? (
-                    <button type="button" onClick={() => toggleSort(column.sort!)} className="inline-flex items-center gap-1 uppercase hover:text-stone-900">
+                    <button type="button" onClick={() => toggleSort(column.sort!)} className={clsx("inline-flex items-center gap-1 hover:text-stone-950", active && "text-stone-950")}>
                       {column.header}
                       {active && (ordering?.startsWith("-") ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />)}
                     </button>
@@ -86,7 +86,7 @@ export function DataTable<T extends Row>({
                 </th>
               );
             })}
-            {actions && <th className="px-4 py-2.5" aria-label={t("Actions")} />}
+            {actions && <th className="h-10 px-4" aria-label={t("Actions")} />}
           </tr>
         </thead>
         <tbody className="divide-y divide-stone-100">
@@ -94,7 +94,7 @@ export function DataTable<T extends Row>({
             <tr
               key={row.id}
               onClick={onRowClick ? () => onRowClick(row) : undefined}
-              className={clsx("group", onRowClick && "cursor-pointer hover:bg-brand-50/40")}
+              className={clsx("group transition-colors", onRowClick && "cursor-pointer hover:bg-stone-50")}
             >
               {columns.map((column) => (
                 <td key={column.key} className={clsx("px-4 py-3 align-middle text-stone-800", column.align === "right" && "text-right whitespace-nowrap tabular-nums", column.className)}>
