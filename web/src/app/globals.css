@@ -57,10 +57,11 @@
   }
 }
 
-/* Georgian has no everyday capitals: CSS uppercase would switch to Mtavruli. */
-html:lang(ka) .uppercase {
-  text-transform: none;
-  letter-spacing: 0.02em;
+/* Georgian is set in Mtavruli everywhere: the "case" feature of Noto Sans Georgian draws each
+   Mkhedruli letter as its same-height Mtavruli capital. The text itself stays Mkhedruli, so
+   search, copy and screen readers are unaffected. Also covers the "ქარ" language-switcher label. */
+:lang(ka) {
+  font-feature-settings: "case";
 }
 
 /* Georgian words run long and the script is dense: lighter, untracked headings read better. */
